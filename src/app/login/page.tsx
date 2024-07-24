@@ -2,10 +2,14 @@
 
 import React, { FormEvent, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const router = useRouter();
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,6 +28,7 @@ const Login = () => {
 
     if (response.ok) {
       setError('');
+      router.push('/systems');
     } else {
       setError(data.message);
     }
