@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1234,
+    "name": "Living room"
+  },
+  {
+    "id": 1235,
+    "name": "Second room at 2nd place (order matters)"
+  },
+  {
+    "id": 1236,
+    "name": "Kitchen"
+  }
+]
