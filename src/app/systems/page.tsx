@@ -20,7 +20,6 @@ const Systems = () => {
   const handleSystemSelect = async (systemUuid: string) => {
     setLoading(true);
     const response = await fetch(`/api/systems/select?uuid=${systemUuid}`);
-    setLoading(false);
 
     if (response.ok) {
       router.push('/');

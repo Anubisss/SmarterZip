@@ -1,5 +1,5 @@
 import ZIPATO_URLS from '../constants/zipatoUrls';
-import zipatoClient from '../zipatoClient';
+import ZipatoClient from '../lib/zipatoClient';
 
 interface System {
   name: string;
@@ -8,7 +8,7 @@ interface System {
 }
 
 const getSystems = async (): Promise<System[]> => {
-  const res = await zipatoClient.get(ZIPATO_URLS.getSystems);
+  const res = await ZipatoClient.getInstance().getClient().get(ZIPATO_URLS.getSystems);
 
   const systems = [];
   for (const system of res.data) {

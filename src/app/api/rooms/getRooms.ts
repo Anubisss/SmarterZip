@@ -1,5 +1,5 @@
 import ZIPATO_URLS from '../constants/zipatoUrls';
-import zipatoClient from '../zipatoClient';
+import ZipatoClient from '../lib/zipatoClient';
 import roomsConfig from '../config/rooms.json';
 
 interface Room {
@@ -11,7 +11,7 @@ interface Room {
 type RoomZipato = Omit<Room, 'connected'>;
 
 const getRooms = async (): Promise<Room[]> => {
-  const res = await zipatoClient.get(ZIPATO_URLS.getRooms);
+  const res = await ZipatoClient.getInstance().getClient().get(ZIPATO_URLS.getRooms);
 
   const rooms = [];
   for (const roomConfig of roomsConfig) {
