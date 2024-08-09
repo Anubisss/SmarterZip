@@ -2,14 +2,16 @@
 
 import React, { useEffect, useState } from 'react';
 
-interface Room {
-  id: number;
-  name: string;
-  connected: boolean;
-}
+import { Room as RoomType, Device as DeviceType } from './home/types';
+import Room from './home/Room';
+
+const getDevicesForRoom = (roomId: number, devices: DeviceType[]): DeviceType[] => {
+  return devices.filter((device) => device.roomId === roomId);
+};
 
 const Home = () => {
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<RoomType[]>([]);
+  const [devices, setDevices] = useState<DeviceType[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -17,10 +19,18 @@ const Home = () => {
     const fetchData = async () => {
       setLoading(true);
 
-      const response = await fetch('/api/rooms');
-      if (response.ok) {
-        const data = await response.json();
-        setRooms(data);
+      const [roomsResponse, devicesResponse] = await Promise.all([
+        fetch('/api/rooms'),
+        fetch('/api/devices'),
+      ]);
+      if (roomsResponse.ok && devicesResponse.ok) {
+        const [roomsData, devicesData] = await Promise.all([
+          roomsResponse.json(),
+          devicesResponse.json(),
+        ]);
+
+        setRooms(roomsData);
+        setDevices(devicesData);
       } else {
         setError(true);
       }
@@ -48,20 +58,7 @@ const Home = () => {
         {!loading && !error && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {rooms.map((room) => (
-              <div
-                key={room.id}
-                className={`p-4 rounded-lg shadow-md ${
-                  room.connected ? 'bg-white' : 'bg-gray-300'
-                }`}
-              >
-                <h3 className="text-lg font-semibold text-gray-800">{room.name}</h3>
-                <p className="text-xs text-gray-600">#{room.id}</p>
-                {!room.connected && (
-                  <p className="text-sm text-red-500">
-                    This room is offline or not properly configured. Cannot find in Zipato by ID.
-                  </p>
-                )}
-              </div>
+              <Room key={room.id} room={room} devices={getDevicesForRoom(room.id, devices)} />
             ))}
           </div>
         )}
