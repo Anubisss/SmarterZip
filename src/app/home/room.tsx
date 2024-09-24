@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { FC } from 'react';
 
 import { Room as RoomType, Device as DeviceType } from './types';
 import Device from './device';
@@ -10,7 +10,7 @@ interface Props {
   devices: DeviceType[];
 }
 
-const Room = ({ room, devices }: Props) => {
+const Room: FC<Props> = ({ room, devices }) => {
   return (
     <div className={`p-4 rounded-lg shadow-md ${room.connected ? 'bg-white' : 'bg-gray-300'}`}>
       <h3 className="text-lg font-semibold text-gray-800">{room.name}</h3>

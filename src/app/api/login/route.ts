@@ -14,6 +14,7 @@ export const POST = async (req: Request) => {
 
     loginData = await login(email, token);
   } catch (ex) {
+    // eslint-disable-next-line no-console
     console.error('error occured during login', (ex as Error).toString());
     return NextResponse.json({ message: 'Zipato error' }, { status: 500 });
   }

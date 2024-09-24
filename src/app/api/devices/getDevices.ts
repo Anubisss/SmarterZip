@@ -21,7 +21,7 @@ interface AbilityZipato {
   } & ({ state: string; position?: undefined } | { position: string; state?: undefined });
 }
 
-const convertDeviceType = (type: string): string | null => {
+const convertDeviceType = (type: string): string => {
   switch (type) {
     case 'MCOHome switch':
     case 'MCOHome MultiSwitch':
@@ -29,14 +29,14 @@ const convertDeviceType = (type: string): string | null => {
     case 'Shutter Switch':
       return 'shutterSwitch';
     default:
-      return null;
+      return 'unhandled';
   }
 };
 
 const getDevices = async (): Promise<Device[]> => {
   const res = await ZipatoClient.getInstance().getClient().get(ZIPATO_URLS.getAbilities);
 
-  const devices = [];
+  const devices: Device[] = [];
   for (const room of roomsConfig) {
     const devicesInTheRoom: AbilityZipato[] = res.data.filter(
       (device: AbilityZipato) =>

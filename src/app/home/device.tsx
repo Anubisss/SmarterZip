@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { FC } from 'react';
 
 import { Device as DeviceType } from './types';
 
@@ -8,7 +8,7 @@ interface Props {
   device: DeviceType;
 }
 
-const Device = ({ device }: Props) => {
+const Device: FC<Props> = ({ device }) => {
   return <p>{device.name}</p>;
 };
 

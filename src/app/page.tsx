@@ -1,15 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Room as RoomType, Device as DeviceType } from './home/types';
-import Room from './home/Room';
+import Room from './home/room';
 
 const getDevicesForRoom = (roomId: number, devices: DeviceType[]): DeviceType[] => {
   return devices.filter((device) => device.roomId === roomId);
 };
 
 const Home = () => {
+  const router = useRouter();
+
   const [rooms, setRooms] = useState<RoomType[]>([]);
   const [devices, setDevices] = useState<DeviceType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -32,6 +35,10 @@ const Home = () => {
         setRooms(roomsData);
         setDevices(devicesData);
       } else {
+        if (roomsResponse.status === 401 || devicesResponse.status === 401) {
+          router.push('/login');
+          return;
+        }
         setError(true);
       }
 
@@ -39,7 +46,7 @@ const Home = () => {
     };
 
     fetchData();
-  }, []);
+  }, [router]);
 
   return (
     <div className="bg-gray-100 min-h-screen p-4">

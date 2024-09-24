@@ -11,11 +11,11 @@ interface System {
 }
 
 const Systems = () => {
+  const router = useRouter();
+
   const [systems, setSystems] = useState<System[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
-  const router = useRouter();
 
   const handleSystemSelect = async (systemUuid: string) => {
     setLoading(true);
@@ -35,6 +35,11 @@ const Systems = () => {
         const data = await response.json();
         setSystems(data);
       } else {
+        if (response.status === 401) {
+          router.push('/login');
+          return;
+        }
+
         setError(true);
       }
 
@@ -42,7 +47,7 @@ const Systems = () => {
     };
 
     fetchData();
-  }, []);
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
