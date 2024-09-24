@@ -15,6 +15,7 @@ const Home = () => {
 
   const [rooms, setRooms] = useState<RoomType[]>([]);
   const [devices, setDevices] = useState<DeviceType[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 

@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const router = useRouter();
@@ -17,6 +19,8 @@ const Login = () => {
       return;
     }
 
+    setLoading(true);
+
     const response = await fetch('/api/login', {
       method: 'POST',
       headers: {
@@ -25,6 +29,8 @@ const Login = () => {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
+
+    setLoading(false);
 
     if (response.ok) {
       setError('');
@@ -63,17 +69,24 @@ const Login = () => {
               value={password}
             />
           </div>
-          {error && (
+          {loading && (
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+            </div>
+          )}
+          {!loading && error && (
             <div className="mb-4">
               <p className="text-red-500">{error}</p>
             </div>
           )}
-          <button
-            type="submit"
-            className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-          >
-            Login
-          </button>
+          {!loading && (
+            <button
+              type="submit"
+              className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+            >
+              Login
+            </button>
+          )}
         </form>
       </div>
     </div>
