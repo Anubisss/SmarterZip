@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Room as RoomType, Device as DeviceType } from './home/types';
+import { Room as RoomType, Device as DeviceType, DeviceState } from './home/types';
 import Room from './home/room';
 
 const getDevicesForRoom = (roomId: number, devices: DeviceType[]): DeviceType[] => {
@@ -23,20 +23,35 @@ const Home = () => {
     const fetchData = async () => {
       setLoading(true);
 
-      const [roomsResponse, devicesResponse] = await Promise.all([
+      const [roomsResponse, devicesResponse, deviceStatesResponse] = await Promise.all([
         fetch('/api/rooms'),
         fetch('/api/devices'),
+        fetch('/api/devices/states'),
       ]);
-      if (roomsResponse.ok && devicesResponse.ok) {
-        const [roomsData, devicesData] = await Promise.all([
+      if (roomsResponse.ok && devicesResponse.ok && deviceStatesResponse.ok) {
+        const [roomsData, devicesData, deviceStatesData]: [
+          roomsData: RoomType[],
+          devicesResponse: DeviceType[],
+          deviceStatesData: DeviceState[]
+        ] = await Promise.all([
           roomsResponse.json(),
           devicesResponse.json(),
+          deviceStatesResponse.json(),
         ]);
 
+        const devicesMergedWithStates: DeviceType[] = devicesData.map((d: DeviceType) => ({
+          ...d,
+          state: deviceStatesData.find((s) => s.uuid === d.stateUuid),
+        }));
+
         setRooms(roomsData);
-        setDevices(devicesData);
+        setDevices(devicesMergedWithStates);
       } else {
-        if (roomsResponse.status === 401 || devicesResponse.status === 401) {
+        if (
+          roomsResponse.status === 401 ||
+          devicesResponse.status === 401 ||
+          deviceStatesResponse.status === 401
+        ) {
           router.push('/login');
           return;
         }

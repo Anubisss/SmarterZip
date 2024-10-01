@@ -30,13 +30,12 @@ const Login = () => {
     });
     const data = await response.json();
 
-    setLoading(false);
-
     if (response.ok) {
       setError('');
       router.push('/systems');
     } else {
       setError(data.message);
+      setLoading(false);
     }
   };
 

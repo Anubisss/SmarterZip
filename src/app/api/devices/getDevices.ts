@@ -21,7 +21,7 @@ interface AbilityZipato {
   } & ({ state: string; position?: undefined } | { position: string; state?: undefined });
 }
 
-const convertDeviceType = (type: string): string => {
+const convertDeviceType = (type: string): string | null => {
   switch (type) {
     case 'MCOHome switch':
     case 'MCOHome MultiSwitch':
@@ -29,7 +29,7 @@ const convertDeviceType = (type: string): string => {
     case 'Shutter Switch':
       return 'shutterSwitch';
     default:
-      return 'unhandled';
+      return null;
   }
 };
 
@@ -47,7 +47,7 @@ const getDevices = async (): Promise<Device[]> => {
       devices.push({
         id: deviceInTheRoom.id,
         name: deviceInTheRoom.name,
-        type: convertDeviceType(deviceInTheRoom.description),
+        type: convertDeviceType(deviceInTheRoom.description) as string,
         roomId: deviceInTheRoom.fields.room,
         stateUuid: deviceInTheRoom.fields.state ?? deviceInTheRoom.fields.position,
       });

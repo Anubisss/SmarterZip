@@ -3,7 +3,7 @@
 import React, { FC } from 'react';
 
 import { Room as RoomType, Device as DeviceType } from './types';
-import Device from './device';
+import Device from './devices/device';
 
 interface Props {
   room: RoomType;
@@ -21,7 +21,7 @@ const Room: FC<Props> = ({ room, devices }) => {
         </p>
       )}
       {room.connected && (
-        <div>
+        <div className="mt-2">
           {devices.map((device) => (
             <Device key={device.id} device={device} />
           ))}

@@ -7,7 +7,16 @@ export interface Room {
 export interface Device {
   id: number;
   name: string;
-  type: string;
+  type: 'lampSwitch' | 'shutterSwitch';
   roomId: number;
   stateUuid: string;
+  state?: DeviceState;
+}
+
+export interface DeviceState {
+  uuid: string;
+  value: {
+    value: string;
+    timestamp: string;
+  };
 }
