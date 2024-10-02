@@ -19,6 +19,31 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const handleDeviceStateChange = (deviceId: number, stateValue: string) => {
+    const device = devices.find((d) => d.id === deviceId);
+    if (!device || !device.state) {
+      return;
+    }
+
+    setDevices((prev) =>
+      prev.map((device) => {
+        if (device.id === deviceId) {
+          return {
+            ...device,
+            state: {
+              ...device.state!,
+              value: {
+                ...device.state!.value,
+                value: stateValue,
+              },
+            },
+          };
+        }
+        return device;
+      })
+    );
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -81,7 +106,12 @@ const Home = () => {
         {!loading && !error && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {rooms.map((room) => (
-              <Room key={room.id} room={room} devices={getDevicesForRoom(room.id, devices)} />
+              <Room
+                key={room.id}
+                room={room}
+                devices={getDevicesForRoom(room.id, devices)}
+                onDeviceStateChange={handleDeviceStateChange}
+              />
             ))}
           </div>
         )}
