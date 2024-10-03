@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { LuRefreshCw } from 'react-icons/lu';
 
 import { Room as RoomType, Device as DeviceType, DeviceState } from './home/types';
 import Room from './home/room';
@@ -18,6 +19,7 @@ const Home = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [refreshingDeviceStates, setRefreshingDeviceStates] = useState(false);
 
   const handleDeviceStateChange = (deviceId: number, stateValue: string) => {
     const device = devices.find((d) => d.id === deviceId);
@@ -42,6 +44,35 @@ const Home = () => {
         return device;
       })
     );
+  };
+
+  const handleRefreshDeviceStates = async () => {
+    setRefreshingDeviceStates(true);
+
+    const res = await fetch('/api/devices/states');
+
+    if (res.ok) {
+      const states: DeviceState[] = await res.json();
+
+      setDevices((prev) =>
+        prev.map((device) => {
+          return {
+            ...device,
+            state: states.find((s) => s.uuid === device.stateUuid),
+          };
+        })
+      );
+
+      setError(false);
+    } else {
+      if (res.status === 401) {
+        router.push('/login');
+        return;
+      }
+      setError(true);
+    }
+
+    setRefreshingDeviceStates(false);
   };
 
   useEffect(() => {
@@ -92,7 +123,16 @@ const Home = () => {
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6 text-center">SmarterZip</h1>
+        <div className="flex justify-center items-center mb-6">
+          <h1 className="text-3xl font-bold">SmarterZip</h1>
+          <div
+            className={`ml-2 p-1 text-gray-500 ${refreshingDeviceStates ? '' : 'cursor-pointer'}`}
+            title="Refresh device states"
+            onClick={!loading && !refreshingDeviceStates ? handleRefreshDeviceStates : undefined}
+          >
+            <LuRefreshCw className={`text-3xl ${refreshingDeviceStates ? 'animate-spin' : ''}`} />
+          </div>
+        </div>
         {loading && (
           <div className="flex items-center justify-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
@@ -110,6 +150,7 @@ const Home = () => {
                 key={room.id}
                 room={room}
                 devices={getDevicesForRoom(room.id, devices)}
+                isRefreshingDeviceStates={refreshingDeviceStates}
                 onDeviceStateChange={handleDeviceStateChange}
               />
             ))}

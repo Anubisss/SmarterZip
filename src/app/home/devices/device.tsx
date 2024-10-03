@@ -7,12 +7,19 @@ import Lamp from './lamp';
 
 interface Props {
   device: DeviceType;
+  isRefreshingDeviceStates: boolean;
   onDeviceStateChange: (deviceId: number, stateValue: string) => void;
 }
 
-const Device: FC<Props> = ({ device, onDeviceStateChange }) => {
+const Device: FC<Props> = ({ device, isRefreshingDeviceStates, onDeviceStateChange }) => {
   if (device.type === 'lampSwitch') {
-    return <Lamp device={device} onDeviceStateChange={onDeviceStateChange} />;
+    return (
+      <Lamp
+        device={device}
+        isRefreshingDeviceStates={isRefreshingDeviceStates}
+        onDeviceStateChange={onDeviceStateChange}
+      />
+    );
   }
 
   return <div className="mt-2">{device.name}</div>;

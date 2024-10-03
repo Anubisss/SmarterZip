@@ -8,10 +8,11 @@ import Device from './devices/device';
 interface Props {
   room: RoomType;
   devices: DeviceType[];
+  isRefreshingDeviceStates: boolean;
   onDeviceStateChange: (deviceId: number, stateValue: string) => void;
 }
 
-const Room: FC<Props> = ({ room, devices, onDeviceStateChange }) => {
+const Room: FC<Props> = ({ room, devices, isRefreshingDeviceStates, onDeviceStateChange }) => {
   return (
     <div className={`p-4 rounded-lg shadow-md ${room.connected ? 'bg-white' : 'bg-gray-300'}`}>
       <h3 className="text-lg font-semibold text-gray-800">{room.name}</h3>
@@ -24,7 +25,12 @@ const Room: FC<Props> = ({ room, devices, onDeviceStateChange }) => {
       {room.connected && (
         <div className="mt-2">
           {devices.map((device) => (
-            <Device key={device.id} device={device} onDeviceStateChange={onDeviceStateChange} />
+            <Device
+              key={device.id}
+              device={device}
+              isRefreshingDeviceStates={isRefreshingDeviceStates}
+              onDeviceStateChange={onDeviceStateChange}
+            />
           ))}
         </div>
       )}
