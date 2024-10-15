@@ -12,7 +12,7 @@ interface Props {
   onDeviceStateChange: (deviceId: number, stateValue: string) => void;
 }
 
-const Lamp: FC<Props> = ({ device, isRefreshingDeviceStates, onDeviceStateChange }) => {
+const LampSwitch: FC<Props> = ({ device, isRefreshingDeviceStates, onDeviceStateChange }) => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -79,4 +79,4 @@ const Lamp: FC<Props> = ({ device, isRefreshingDeviceStates, onDeviceStateChange
   );
 };
 
-export default Lamp;
+export default LampSwitch;
