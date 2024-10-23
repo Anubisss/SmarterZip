@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 
 import { Device as DeviceType } from '../types';
 import LampSwitch from './lampSwitch';
-import ShutterSwitch from './shutterSwitch';
+import ShutterSwitch from './shutterSwitch/shutterSwitch';
 
 interface Props {
   device: DeviceType;
@@ -23,7 +23,13 @@ const Device: FC<Props> = ({ device, isRefreshingDeviceStates, onDeviceStateChan
     );
   }
   if (device.type === 'shutterSwitch') {
-    return <ShutterSwitch device={device} isRefreshingDeviceStates={isRefreshingDeviceStates} />;
+    return (
+      <ShutterSwitch
+        device={device}
+        isRefreshingDeviceStates={isRefreshingDeviceStates}
+        onDeviceStateChange={onDeviceStateChange}
+      />
+    );
   }
 
   return <div className="mt-2">{device.name}</div>;
