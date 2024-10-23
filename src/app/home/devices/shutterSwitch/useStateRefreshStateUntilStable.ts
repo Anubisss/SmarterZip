@@ -35,12 +35,6 @@ const useStateRefreshStateUntilStable = (
         setPreviousStates([]);
       }
     }
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
   }, [previousStates, intervalId]);
 
   const startRefresh = () => {
