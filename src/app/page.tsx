@@ -7,6 +7,8 @@ import { LuRefreshCw } from 'react-icons/lu';
 import { Room as RoomType, Device as DeviceType, DeviceState } from './home/types';
 import Room from './home/room';
 
+const REFRESH_ALL_STATE_INTERVAL = 60000;
+
 const getDevicesForRoom = (roomId: number, devices: DeviceType[]): DeviceType[] => {
   return devices.filter((device) => device.roomId === roomId);
 };
@@ -74,6 +76,14 @@ const Home = () => {
 
     setRefreshingDeviceStates(false);
   };
+
+  useEffect(() => {
+    const id = setInterval(handleRefreshDeviceStates, REFRESH_ALL_STATE_INTERVAL);
+
+    return () => {
+      clearInterval(id);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
