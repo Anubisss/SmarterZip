@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LuRefreshCw } from 'react-icons/lu';
 
@@ -48,7 +48,7 @@ const Home = () => {
     );
   };
 
-  const handleRefreshDeviceStates = async () => {
+  const handleRefreshDeviceStates = useCallback(async () => {
     setRefreshingDeviceStates(true);
 
     const res = await fetch('/api/devices/states');
@@ -75,7 +75,7 @@ const Home = () => {
     }
 
     setRefreshingDeviceStates(false);
-  };
+  }, [router]);
 
   useEffect(() => {
     const id = setInterval(handleRefreshDeviceStates, REFRESH_ALL_STATE_INTERVAL);
@@ -83,7 +83,7 @@ const Home = () => {
     return () => {
       clearInterval(id);
     };
-  }, []);
+  }, [handleRefreshDeviceStates]);
 
   useEffect(() => {
     const fetchData = async () => {
