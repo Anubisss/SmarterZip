@@ -109,9 +109,10 @@ const Home = () => {
           ...d,
           state: deviceStatesData.find((s) => s.uuid === d.stateUuid),
         }));
+        const sortedDevices = devicesMergedWithStates.sort((a, b) => a.name.localeCompare(b.name));
 
         setRooms(roomsData);
-        setDevices(devicesMergedWithStates);
+        setDevices(sortedDevices);
       } else {
         if (
           roomsResponse.status === 401 ||
