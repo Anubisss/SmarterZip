@@ -35,5 +35,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# rooms config
-src/app/api/config/rooms.json
+# configs
+src/app/api/config/*.json

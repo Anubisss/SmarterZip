@@ -1,6 +1,7 @@
 import ZIPATO_URLS from '../constants/zipatoUrls';
 import ZipatoClient from '../lib/zipatoClient';
 import roomsConfig from '../config/rooms.json';
+import ignoredDevicesConfig from '../config/ignoredDevices.json';
 
 interface Device {
   id: number;
@@ -33,6 +34,10 @@ const convertDeviceType = (type: string): string | null => {
   }
 };
 
+const isDeviceIgnored = (deviceId: number): boolean => {
+  return (ignoredDevicesConfig as number[]).includes(deviceId);
+};
+
 const getDevices = async (): Promise<Device[]> => {
   const res = await ZipatoClient.getInstance().getClient().get(ZIPATO_URLS.getAbilities);
 
@@ -40,7 +45,9 @@ const getDevices = async (): Promise<Device[]> => {
   for (const room of roomsConfig) {
     const devicesInTheRoom: AbilityZipato[] = res.data.filter(
       (device: AbilityZipato) =>
-        device.fields.room === room.id && convertDeviceType(device.description)
+        device.fields.room === room.id &&
+        convertDeviceType(device.description) &&
+        !isDeviceIgnored(device.id)
     );
 
     for (const deviceInTheRoom of devicesInTheRoom) {
