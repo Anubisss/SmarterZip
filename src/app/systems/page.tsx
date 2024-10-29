@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-
 import { useRouter } from 'next/navigation';
+
+import Footer from '../components/footer';
 
 interface System {
   name: string;
@@ -51,7 +52,7 @@ const Systems = () => {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
       <div className="max-w-7xl mx-auto bg-white rounded-lg p-6 shadow-lg">
         <h2 className="mb-6 text-2xl font-semibold text-center text-gray-700">Select a System</h2>
         {loading && (
@@ -82,6 +83,7 @@ const Systems = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

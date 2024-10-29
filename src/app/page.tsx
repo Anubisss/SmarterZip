@@ -6,6 +6,7 @@ import { LuRefreshCw } from 'react-icons/lu';
 
 import { Room as RoomType, Device as DeviceType, DeviceState } from './home/types';
 import Room from './home/room';
+import Footer from './components/footer';
 
 const REFRESH_ALL_STATE_INTERVAL = 60000;
 
@@ -155,7 +156,7 @@ const Home = () => {
           </p>
         )}
         {!loading && !error && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {rooms.map((room) => (
               <Room
                 key={room.id}
@@ -168,6 +169,7 @@ const Home = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

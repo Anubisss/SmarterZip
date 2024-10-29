@@ -14,7 +14,11 @@ interface Props {
 
 const Room: FC<Props> = ({ room, devices, isRefreshingDeviceStates, onDeviceStateChange }) => {
   return (
-    <div className={`p-4 rounded-lg shadow-md ${room.connected ? 'bg-white' : 'bg-gray-300'}`}>
+    <div
+      className={`p-4 rounded-lg shadow-md border border-gray-400 ${
+        room.connected ? 'bg-white' : 'bg-gray-300'
+      }`}
+    >
       <h3 className="text-lg font-semibold text-gray-800">{room.name}</h3>
       <p className="text-xs text-gray-600">#{room.id}</p>
       {!room.connected && (

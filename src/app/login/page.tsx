@@ -1,8 +1,9 @@
 'use client';
 
 import React, { FormEvent, useState } from 'react';
-
 import { useRouter } from 'next/navigation';
+
+import Footer from '../components/footer';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -40,7 +41,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-sm p-6 bg-white rounded-md shadow-md">
         <h2 className="mb-6 text-2xl font-semibold text-center text-gray-700">Login</h2>
         <form onSubmit={handleLogin}>
@@ -88,6 +89,7 @@ const Login = () => {
           )}
         </form>
       </div>
+      <Footer />
     </div>
   );
 };
