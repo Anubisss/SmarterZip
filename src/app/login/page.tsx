@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import Footer from '../components/footer';
@@ -13,6 +13,21 @@ const Login = () => {
   const [error, setError] = useState('');
 
   const router = useRouter();
+
+  useEffect(() => {
+    const getDevicesRedirectIfOk = async () => {
+      setLoading(true);
+
+      const roomsResponse = await fetch('/api/devices');
+      if (roomsResponse.ok) {
+        router.push('/');
+      }
+
+      setLoading(false);
+    };
+
+    getDevicesRedirectIfOk();
+  }, [router]);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
