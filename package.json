@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "scheduler:dev": "nodemon --watch src/scheduler --exec tsx --tsconfig tsconfig.scheduler.json --env-file=.env src/scheduler/index.ts",
+    "scheduler:dev": "nodemon --watch src/scheduler --watch src/lib --exec \"tsx --tsconfig tsconfig.scheduler.json --env-file=.env\" src/scheduler/index.ts",
     "scheduler:prod": "node dist/scheduler/scheduler/index.js",
     "scheduler:build": "tsc -p tsconfig.scheduler.json",
     "build": "next build",
