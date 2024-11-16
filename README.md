@@ -22,6 +22,11 @@ The project is not publicly deployed by me, so if you’d like to use it, you’
   - All states refresh automatically every 60s
   - Simple responsive design
   - Rooms/devices can be renamed/ignored via config files
+- Scheduler page
+  - New scheduled tasks can be created
+  - Tasks can be deleted
+  - Each task will run once a day
+  - Displays the last execution time for each task
 
 ### Limitations
 
@@ -34,8 +39,8 @@ Since this a personal project and Zipato doesn't have API documentation there we
 
 ### Used technologies
 
-- FE: React, Nextjs, TypeScript
-- BE: Nodejs, Nextjs, TypeScript
+- FE: React, Nextjs, TypeScript, Tailwind CSS
+- BE: Nodejs, Nextjs, TypeScript, SQLite
 
 ### Screenshots
 
@@ -44,12 +49,15 @@ Since this a personal project and Zipato doesn't have API documentation there we
 ![Home - rooms & devices](3.png)
 ![Mobile](4.png)
 ![Tablet](5.png)
+![Scheduler](6.png)
 
 ### Demo video
 
 https://www.youtube.com/watch?v=CPHo--McWzQ
 
-### How to start
+https://www.youtube.com/watch?v=i53w90-4FZ4
+
+### How to start (API & web client)
 
 Create 3 configuration files based on the examples provided in src/app/api/config/\*.json.example
 
@@ -57,19 +65,54 @@ Create 3 configuration files based on the examples provided in src/app/api/confi
 - src/app/api/config/ignoredDevices.json - put those devices (device ID) here which shouldn't be displayed
 - src/app/api/config/rooms.json - configure all rooms to be shown on the homepage (by room ID and name)
 
-Dev mode
+Create an empty SQLite DB
+
+```
+sqlite3 smarterzip.sqlite3 "VACUUM;"
+```
+
+Configure the DB path in .env
+
+- create the .env file from .env.example
+- configure DATABASE_PATH
+
+Install dependencies
 
 ```
 npm i
+```
+
+Dev mode
+
+```
 npm run dev
 ```
 
 Optimized production mode
 
 ```
-npm i
 npm run build
 npm start
+```
+
+### How to start (scheduler)
+
+Configuration
+
+- Set it up similarly API & web client
+- Ensure SCHEDULER_LOGIN\_\* variables match those used for logging into the web client
+
+Dev mode
+
+```
+npm run scheduler:dev
+```
+
+Optimized production mode
+
+```
+npm run scheduler:build
+npm run scheduler:prod
 ```
 
 ### License

@@ -7,6 +7,7 @@ import { LuRefreshCw } from 'react-icons/lu';
 import { Room as RoomType, Device as DeviceType, DeviceState } from './home/types';
 import Room from './home/room';
 import Footer from './components/footer';
+import Navigation from './components/navigation';
 
 const REFRESH_ALL_STATE_INTERVAL = 60000;
 
@@ -110,10 +111,10 @@ const Home = () => {
           ...d,
           state: deviceStatesData.find((s) => s.uuid === d.stateUuid),
         }));
-        const sortedDevices = devicesMergedWithStates.sort((a, b) => a.name.localeCompare(b.name));
+        devicesMergedWithStates.sort((a, b) => a.name.localeCompare(b.name));
 
         setRooms(roomsData);
-        setDevices(sortedDevices);
+        setDevices(devicesMergedWithStates);
       } else {
         if (
           roomsResponse.status === 401 ||
@@ -169,6 +170,7 @@ const Home = () => {
           </div>
         )}
       </div>
+      <Navigation />
       <Footer />
     </div>
   );
