@@ -28,9 +28,20 @@ const getState = async (uuid: string): Promise<State | 'LOGIN_REQUIRED' | null> 
 };
 
 const changeState = async (uuid: string, value: string): Promise<void> => {
-  await axios.put(`${BASE_URL}/devices/states/${uuid}`, {
-    value,
-  });
+  try {
+    await axios.put(`${BASE_URL}/devices/states/${uuid}`, {
+      value,
+    });
+  } catch (ex) {
+    if (axios.isAxiosError(ex) && ex.response) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `(ERROR)[changeState] can't change state, uuid: ${uuid}, value: ${value}, status: ${ex.response.status}`
+      );
+      return;
+    }
+    throw ex;
+  }
 };
 
 const login = async (email: string, password: string): Promise<void> => {
