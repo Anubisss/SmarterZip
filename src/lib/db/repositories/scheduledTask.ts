@@ -1,14 +1,14 @@
 import Database from 'better-sqlite3';
 
 import { ScheduledTask } from '../../types';
-import db from '../';
+import getDb from '../';
 
 const TABLE_NAME = 'scheduled_tasks';
 
 class ScheduledTaskRepository {
   static insert(task: Omit<ScheduledTask, 'id' | 'createdAt' | 'lastExecutedAt'>): void {
     const now = new Date().toISOString();
-    const stmt = db.prepare(`
+    const stmt = getDb().prepare(`
       INSERT INTO "${TABLE_NAME}" ("roomId", "deviceId", "deviceStateUuid", "action", "when", "createdAt")
       VALUES (?, ?, ?, ?, ?, ?)
     `);
@@ -16,17 +16,19 @@ class ScheduledTaskRepository {
   }
 
   static getAll(): ScheduledTask[] {
-    const stmt: Database.Statement<[], ScheduledTask> = db.prepare(`SELECT * FROM "${TABLE_NAME}"`);
+    const stmt: Database.Statement<[], ScheduledTask> = getDb().prepare(
+      `SELECT * FROM "${TABLE_NAME}"`
+    );
     return stmt.all();
   }
 
   static delete(id: number): void {
-    const stmt = db.prepare(`DELETE FROM "${TABLE_NAME}" WHERE "id" = ?`);
+    const stmt = getDb().prepare(`DELETE FROM "${TABLE_NAME}" WHERE "id" = ?`);
     stmt.run(id);
   }
 
   static updateLastExecutedAt(id: number, time: string): void {
-    const stmt = db.prepare(`UPDATE "${TABLE_NAME}" SET "lastExecutedAt" = ? WHERE "id" = ?`);
+    const stmt = getDb().prepare(`UPDATE "${TABLE_NAME}" SET "lastExecutedAt" = ? WHERE "id" = ?`);
     stmt.run(time, id);
   }
 }
