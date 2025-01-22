@@ -115,6 +115,19 @@ npm run scheduler:build
 npm run scheduler:prod
 ```
 
+### Docker
+
+```
+HOST_PORT=6613 \
+DATABASE_PATH=/Users/abc/dev/SmarterZip.sqlite3 \
+DATABASE_LOGGING_ENABLED=false \
+API_URL=http://web:3000/api \
+SCHEDULER_LOGIN_EMAIL=mai@l.com \
+SCHEDULER_LOGIN_PASSWORD=pass \
+SCHEDULER_LOGIN_SYSTEM_UUID=id-ad-f \
+docker-compose up --build -d
+```
+
 ### License
 
 The MIT License (MIT)

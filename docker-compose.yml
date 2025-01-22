@@ -1,0 +1,32 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./src/app/Dockerfile
+    ports:
+      - "${HOST_PORT}:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_PATH=/app/db/SmarterZip.sqlite3
+      - DATABASE_LOGGING_ENABLED=${DATABASE_LOGGING_ENABLED}
+    volumes:
+      - ${DATABASE_PATH}:/app/db/SmarterZip.sqlite3
+    restart: unless-stopped
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: ./src/scheduler/Dockerfile
+    depends_on:
+      - web
+    environment:
+      - NODE_ENV=production
+      - DATABASE_PATH=/app/db/SmarterZip.sqlite3
+      - DATABASE_LOGGING_ENABLED=${DATABASE_LOGGING_ENABLED}
+      - API_URL=${API_URL}
+      - SCHEDULER_LOGIN_EMAIL=${SCHEDULER_LOGIN_EMAIL}
+      - SCHEDULER_LOGIN_PASSWORD=${SCHEDULER_LOGIN_PASSWORD}
+      - SCHEDULER_LOGIN_SYSTEM_UUID=${SCHEDULER_LOGIN_SYSTEM_UUID}
+    volumes:
+      - ${DATABASE_PATH}:/app/db/SmarterZip.sqlite3
+    restart: unless-stopped
