@@ -5,28 +5,27 @@ import React, { FC, FormEvent, useEffect, useState } from 'react';
 import { Device, Room } from '../home/types';
 import BlindsIcon from '../home/devices/shutterSwitch/blindsIcon';
 import { getDeviceTypeName, getUtcTimeFromLocalTime } from './helpers';
+import { useCreateScheduledTask } from '../apiHooks/scheduledTasks';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onTaskAdd: () => void;
   rooms: Room[];
   devices: Device[];
 }
 
-const TaskModal: FC<Props> = ({ isOpen, onClose, onTaskAdd, rooms, devices }) => {
+const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
   const [roomId, setRoomId] = useState('');
   const [deviceId, setDeviceId] = useState('');
   const [when, setWhen] = useState('');
   const [action, setAction] = useState('');
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const { mutateAsync: createScheduledTask, error, isPending } = useCreateScheduledTask();
 
   const handleNewTask = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (loading) {
+    if (isPending) {
       return;
     }
     if (!roomId || !deviceId || !when || !action) {
@@ -42,31 +41,15 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, onTaskAdd, rooms, devices }) =>
     if (device.type === 'shutterSwitch' && (+action < 0 || +action > 100)) {
       return;
     }
-    setLoading(true);
 
-    const res = await fetch('/api/scheduled-tasks', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        roomId: +roomId,
-        deviceId: +deviceId,
-        deviceStateUuid: device.stateUuid,
-        when: getUtcTimeFromLocalTime(when),
-        action,
-      }),
+    await createScheduledTask({
+      roomId: +roomId,
+      deviceId: +deviceId,
+      deviceStateUuid: device.stateUuid,
+      when: getUtcTimeFromLocalTime(when),
+      action,
     });
-
-    if (res.ok) {
-      setError(false);
-      setLoading(false);
-      onClose();
-      onTaskAdd();
-    } else {
-      setError(true);
-      setLoading(false);
-    }
+    onClose();
   };
 
   useEffect(() => {
@@ -181,17 +164,17 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, onTaskAdd, rooms, devices }) =>
               </div>
             )}
           </div>
-          {loading && (
+          {isPending && (
             <div className="flex items-center justify-center">
               <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
             </div>
           )}
-          {!loading && error && (
+          {!isPending && error && (
             <div className="mb-4">
               <p className="text-red-500">Wasn&apos;t able to create a new task. Try again.</p>
             </div>
           )}
-          {!loading && (
+          {!isPending && (
             <div className="flex justify-end space-x-4">
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"

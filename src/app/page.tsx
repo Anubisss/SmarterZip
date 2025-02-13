@@ -1,170 +1,80 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useMemo } from 'react';
 import { LuRefreshCw } from 'react-icons/lu';
 
-import { Room as RoomType, Device as DeviceType, DeviceState } from './home/types';
+import { Device as DeviceType } from './home/types';
 import Room from './home/room';
 import Footer from './components/footer';
 import Navigation from './components/navigation';
-
-const REFRESH_ALL_STATE_INTERVAL = 60000;
+import { useRooms } from './apiHooks/rooms';
+import { useDevices } from './apiHooks/devices';
+import { useDeviceStates } from './apiHooks/deviceStates';
 
 const getDevicesForRoom = (roomId: number, devices: DeviceType[]): DeviceType[] => {
   return devices.filter((device) => device.roomId === roomId);
 };
 
 const Home = () => {
-  const router = useRouter();
+  const { data: rooms, error: roomsError } = useRooms();
+  const { data: devices, error: devicesError } = useDevices();
+  const {
+    data: deviceStates,
+    error: deviceStatesError,
+    isFetching: isFetchingDeviceStates,
+    refetch: refetchDeviceStates,
+  } = useDeviceStates({ refreshEnabled: true });
 
-  const [rooms, setRooms] = useState<RoomType[]>([]);
-  const [devices, setDevices] = useState<DeviceType[]>([]);
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [refreshingDeviceStates, setRefreshingDeviceStates] = useState(false);
-
-  const handleDeviceStateChange = (deviceId: number, stateValue: string) => {
-    const device = devices.find((d) => d.id === deviceId);
-    if (!device || !device.state) {
-      return;
+  const devicesWithStates: DeviceType[] = useMemo(() => {
+    if (!devices || !deviceStates) {
+      return [];
     }
 
-    setDevices((prev) =>
-      prev.map((device) => {
-        if (device.id === deviceId) {
-          return {
-            ...device,
-            state: {
-              ...device.state!,
-              value: {
-                ...device.state!.value,
-                value: stateValue,
-              },
-            },
-          };
-        }
-        return device;
-      })
-    );
-  };
+    const devicesMergedWithStates: DeviceType[] = devices.map((d: DeviceType) => ({
+      ...d,
+      state: deviceStates.find((s) => s.uuid === d.stateUuid),
+    }));
+    devicesMergedWithStates.sort((a, b) => a.name.localeCompare(b.name));
 
-  const handleRefreshDeviceStates = useCallback(async () => {
-    setRefreshingDeviceStates(true);
+    return devicesMergedWithStates;
+  }, [devices, deviceStates]);
 
-    const res = await fetch('/api/devices/states');
-
-    if (res.ok) {
-      const states: DeviceState[] = await res.json();
-
-      setDevices((prev) =>
-        prev.map((device) => {
-          return {
-            ...device,
-            state: states.find((s) => s.uuid === device.stateUuid),
-          };
-        })
-      );
-
-      setError(false);
-    } else {
-      if (res.status === 401) {
-        router.push('/login');
-        return;
-      }
-      setError(true);
-    }
-
-    setRefreshingDeviceStates(false);
-  }, [router]);
-
-  useEffect(() => {
-    const id = setInterval(handleRefreshDeviceStates, REFRESH_ALL_STATE_INTERVAL);
-
-    return () => {
-      clearInterval(id);
-    };
-  }, [handleRefreshDeviceStates]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-
-      const [roomsResponse, devicesResponse, deviceStatesResponse] = await Promise.all([
-        fetch('/api/rooms'),
-        fetch('/api/devices'),
-        fetch('/api/devices/states'),
-      ]);
-      if (roomsResponse.ok && devicesResponse.ok && deviceStatesResponse.ok) {
-        const [roomsData, devicesData, deviceStatesData]: [
-          roomsData: RoomType[],
-          devicesResponse: DeviceType[],
-          deviceStatesData: DeviceState[]
-        ] = await Promise.all([
-          roomsResponse.json(),
-          devicesResponse.json(),
-          deviceStatesResponse.json(),
-        ]);
-
-        const devicesMergedWithStates: DeviceType[] = devicesData.map((d: DeviceType) => ({
-          ...d,
-          state: deviceStatesData.find((s) => s.uuid === d.stateUuid),
-        }));
-        devicesMergedWithStates.sort((a, b) => a.name.localeCompare(b.name));
-
-        setRooms(roomsData);
-        setDevices(devicesMergedWithStates);
-      } else {
-        if (
-          roomsResponse.status === 401 ||
-          devicesResponse.status === 401 ||
-          deviceStatesResponse.status === 401
-        ) {
-          router.push('/login');
-          return;
-        }
-        setError(true);
-      }
-
-      setLoading(false);
-    };
-
-    fetchData();
-  }, [router]);
+  const showLoadingIndicator = !rooms || !devices || !deviceStates;
+  const hasError = !!roomsError || !!devicesError || !!deviceStatesError;
 
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="container mx-auto p-4">
         <div className="flex justify-center items-center mb-6">
           <h1 className="text-3xl font-bold">SmarterZip</h1>
-          <div
-            className={`ml-2 p-1 text-gray-500 ${refreshingDeviceStates ? '' : 'cursor-pointer'}`}
-            title="Refresh device states"
-            onClick={!loading && !refreshingDeviceStates ? handleRefreshDeviceStates : undefined}
-          >
-            <LuRefreshCw className={`text-3xl ${refreshingDeviceStates ? 'animate-spin' : ''}`} />
-          </div>
+          {!showLoadingIndicator && (
+            <div
+              className={`ml-2 p-1 text-gray-500 ${isFetchingDeviceStates ? '' : 'cursor-pointer'}`}
+              title="Refresh device states"
+              onClick={!isFetchingDeviceStates ? () => refetchDeviceStates() : undefined}
+            >
+              <LuRefreshCw className={`text-3xl ${isFetchingDeviceStates ? 'animate-spin' : ''}`} />
+            </div>
+          )}
         </div>
-        {loading && (
+        {showLoadingIndicator && (
           <div className="flex items-center justify-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
           </div>
         )}
-        {!loading && error && (
+        {!showLoadingIndicator && hasError && (
           <p className="text-xl text-red-500 text-center">
             Can&apos;t load the systems. Try reload.
           </p>
         )}
-        {!loading && !error && (
+        {!showLoadingIndicator && !hasError && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {rooms.map((room) => (
               <Room
                 key={room.id}
                 room={room}
-                devices={getDevicesForRoom(room.id, devices)}
-                isRefreshingDeviceStates={refreshingDeviceStates}
-                onDeviceStateChange={handleDeviceStateChange}
+                devices={getDevicesForRoom(room.id, devicesWithStates)}
+                isRefreshingDeviceStates={isFetchingDeviceStates}
               />
             ))}
           </div>

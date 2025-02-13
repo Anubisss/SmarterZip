@@ -9,27 +9,14 @@ import ShutterSwitch from './shutterSwitch/shutterSwitch';
 interface Props {
   device: DeviceType;
   isRefreshingDeviceStates: boolean;
-  onDeviceStateChange: (deviceId: number, stateValue: string) => void;
 }
 
-const Device: FC<Props> = ({ device, isRefreshingDeviceStates, onDeviceStateChange }) => {
+const Device: FC<Props> = ({ device, isRefreshingDeviceStates }) => {
   if (device.type === 'lampSwitch') {
-    return (
-      <LampSwitch
-        device={device}
-        isRefreshingDeviceStates={isRefreshingDeviceStates}
-        onDeviceStateChange={onDeviceStateChange}
-      />
-    );
+    return <LampSwitch device={device} isRefreshingDeviceStates={isRefreshingDeviceStates} />;
   }
   if (device.type === 'shutterSwitch') {
-    return (
-      <ShutterSwitch
-        device={device}
-        isRefreshingDeviceStates={isRefreshingDeviceStates}
-        onDeviceStateChange={onDeviceStateChange}
-      />
-    );
+    return <ShutterSwitch device={device} isRefreshingDeviceStates={isRefreshingDeviceStates} />;
   }
 
   return <div className="mt-2">{device.name}</div>;

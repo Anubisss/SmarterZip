@@ -9,10 +9,9 @@ interface Props {
   room: RoomType;
   devices: DeviceType[];
   isRefreshingDeviceStates: boolean;
-  onDeviceStateChange: (deviceId: number, stateValue: string) => void;
 }
 
-const Room: FC<Props> = ({ room, devices, isRefreshingDeviceStates, onDeviceStateChange }) => {
+const Room: FC<Props> = ({ room, devices, isRefreshingDeviceStates }) => {
   return (
     <div
       className={`p-4 rounded-lg shadow-md border border-gray-400 ${
@@ -33,7 +32,6 @@ const Room: FC<Props> = ({ room, devices, isRefreshingDeviceStates, onDeviceStat
               key={device.id}
               device={device}
               isRefreshingDeviceStates={isRefreshingDeviceStates}
-              onDeviceStateChange={onDeviceStateChange}
             />
           ))}
         </div>
