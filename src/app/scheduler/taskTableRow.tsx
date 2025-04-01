@@ -4,6 +4,7 @@ import React, { FC } from 'react';
 import { MdDelete } from 'react-icons/md';
 import Moment from 'react-moment';
 import { PiLampPendantFill, PiLampPendantLight } from 'react-icons/pi';
+import moment from 'moment';
 
 import { ScheduledTask } from './types';
 import { Device } from '../home/types';
@@ -28,9 +29,7 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
       <td className="p-2 text-center">{task.roomName}</td>
       <td className="p-2 text-center">{task.deviceName}</td>
       <td className="p-2 text-center">
-        <Moment utc format="HH:mm" local>
-          {`1970-01-01T${task.when}:00Z`}
-        </Moment>
+        <Moment format="HH:mm">{`${moment.utc().format('YYYY-MM-DD')}T${task.when}:00Z`}</Moment>
       </td>
       <td className="p-2 text-center flex justify-center items-center">
         {device?.type === 'shutterSwitch' ? (

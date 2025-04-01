@@ -7,7 +7,7 @@ const getLatestTasksPerDevice = (now: string): ScheduledTask[] => {
   const tasks = ScheduledTaskRepository.getAll();
 
   const tasksBeforeNow = tasks.filter((t) => {
-    const whenDate = `${moment(now).format('YYYY-MM-DD')}T${t.when}`;
+    const whenDate = `${moment.utc(now).format('YYYY-MM-DD')}T${t.when}`;
     return moment.utc(whenDate).isSameOrBefore(now);
   });
 
