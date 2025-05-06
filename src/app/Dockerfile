@@ -6,6 +6,8 @@ COPY . ./
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
+ARG NEXT_PUBLIC_API_URL
+
 RUN npm ci
 RUN npm run build
 

@@ -6,14 +6,7 @@ import { useEffect } from 'react';
 import { DeviceState } from '../home/types';
 import { HttpError } from './lib/httpError';
 import { REFRESH_ALL_DEVICE_STATES_INTERVAL } from './lib/constants';
-
-const getDeviceStates = async (): Promise<DeviceState[]> => {
-  const response = await fetch('/api/devices/states');
-  if (!response.ok) {
-    throw new HttpError(response.status, response.statusText);
-  }
-  return await response.json();
-};
+import { getDeviceState, getDeviceStates } from './lib/fetchApi';
 
 export const useDeviceStates = ({
   enabled = true,
@@ -29,12 +22,10 @@ export const useDeviceStates = ({
   });
 };
 
-const getDeviceState = async (stateUuid: string): Promise<{ value: string; timestamp: number }> => {
-  const response = await fetch(`/api/devices/states/${stateUuid}`);
-  if (!response.ok) {
-    throw new HttpError(response.status, response.statusText);
-  }
-  const data: DeviceState = await response.json();
+const getDeviceStateAndMap = async (
+  stateUuid: string
+): Promise<{ value: string; timestamp: number }> => {
+  const data = await getDeviceState(stateUuid);
   return { value: data.value.value, timestamp: Date.now() };
 };
 
@@ -43,7 +34,7 @@ export const useDeviceState = (stateUuid: string, refetchInterval: number | fals
 
   const result = useQuery<{ value: string; timestamp: number }>({
     queryKey: ['deviceState', stateUuid],
-    queryFn: () => getDeviceState(stateUuid),
+    queryFn: () => getDeviceStateAndMap(stateUuid),
     enabled: refetchInterval === false ? false : true,
     refetchInterval,
   });

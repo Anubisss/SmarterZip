@@ -5,14 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { System } from '../systems/types';
 import { HttpError } from './lib/httpError';
 import { STATIC_DATA_STALE_TIME } from './lib/constants';
-
-const getSystems = async (): Promise<System[]> => {
-  const response = await fetch('/api/systems');
-  if (!response.ok) {
-    throw new HttpError(response.status, response.statusText);
-  }
-  return await response.json();
-};
+import { getSystems } from './lib/fetchApi';
 
 export const useSystems = () => {
   return useQuery<System[]>({

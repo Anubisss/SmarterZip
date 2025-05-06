@@ -1,26 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
 
-import defaultRetry from '../apiHooks/lib/defaultRetry';
 import GlobalQueryErrorHandler from './globalQueryErrorHandler';
+import getQueryClient from './queryClient';
 
 const Providers = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            retry: defaultRetry,
-          },
-        },
-      })
-  );
+  const queryClient = getQueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>

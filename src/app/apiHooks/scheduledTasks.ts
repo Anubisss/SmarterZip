@@ -4,19 +4,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { HttpError } from './lib/httpError';
 import { ScheduledTaskDTO } from '../scheduler/types';
-
-const getScheduledTasks = async (): Promise<ScheduledTaskDTO[]> => {
-  const response = await fetch('/api/scheduled-tasks');
-  if (!response.ok) {
-    throw new HttpError(response.status, response.statusText);
-  }
-  return await response.json();
-};
+import { SSR_DYNAMIC_DATA_STALE_TIME } from './lib/constants';
+import { getScheduledTasks } from './lib/fetchApi';
 
 export const useScheduledTasks = () => {
   return useQuery<ScheduledTaskDTO[]>({
     queryKey: ['scheduledTasks'],
     queryFn: getScheduledTasks,
+    staleTime: SSR_DYNAMIC_DATA_STALE_TIME,
   });
 };
 

@@ -119,6 +119,7 @@ npm run scheduler:prod
 
 ```
 HOST_PORT=6613 \
+NEXT_PUBLIC_API_URL=http://yourip:6613/api
 DATABASE_PATH=/Users/abc/dev/SmarterZip.sqlite3 \
 DATABASE_LOGGING_ENABLED=false \
 API_URL=http://web:3000/api \
