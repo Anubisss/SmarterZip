@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.66.0",
+    "@tanstack/react-query-devtools": "^5.75.5",
     "axios": "^1.7.2",
     "axios-cookiejar-support": "^5.0.2",
     "better-sqlite3": "^11.5.0",
@@ -31,7 +32,7 @@
     "tough-cookie": "^4.1.4"
   },
   "devDependencies": {
-    "@tanstack/eslint-plugin-query": "^5.66.0",
+    "@tanstack/eslint-plugin-query": "^5.74.7",
     "@types/better-sqlite3": "^7.6.11",
     "@types/node": "^20",
     "@types/react": "^18",

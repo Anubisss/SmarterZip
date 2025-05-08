@@ -30,7 +30,7 @@ export const useDeleteScheduledTask = () => {
   return useMutation<void, Error, number>({
     mutationFn: deleteScheduledTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['scheduledTasks'] });
+      return queryClient.invalidateQueries({ queryKey: ['scheduledTasks'] });
     },
   });
 };
@@ -74,7 +74,7 @@ export const useCreateScheduledTask = () => {
   return useMutation<void, Error, NewScheduledTask>({
     mutationFn: createScheduledTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['scheduledTasks'] });
+      return queryClient.invalidateQueries({ queryKey: ['scheduledTasks'] });
     },
   });
 };

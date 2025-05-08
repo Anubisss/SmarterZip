@@ -4,10 +4,10 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:@tanstack/query/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "prettier"
   ],
-  "plugins": ["react", "react-hooks", "@typescript-eslint"],
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "@tanstack/query"],
   "parser": "@typescript-eslint/parser",
   "rules": {
     "no-unused-vars": "off",
