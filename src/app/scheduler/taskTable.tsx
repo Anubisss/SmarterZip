@@ -2,9 +2,9 @@
 
 import React, { FC } from 'react';
 
-import { ScheduledTask } from './types';
 import { Device } from '../home/types';
 import TaskTableRow from './taskTableRow';
+import { ScheduledTask } from './types';
 
 interface Props {
   tasks: ScheduledTask[];
@@ -14,7 +14,7 @@ interface Props {
 
 const TaskTable: FC<Props> = ({ tasks, devices, onDeleteTask }) => {
   return (
-    <div className="max-w-[1600px] mx-auto overflow-x-auto">
+    <div className="mx-auto max-w-[1600px] overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200 border">
         <thead className="bg-gray-50">
           <tr>
@@ -27,7 +27,7 @@ const TaskTable: FC<Props> = ({ tasks, devices, onDeleteTask }) => {
             <th className="p-3">Delete</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200 bg-white">
           {tasks.map((task) => (
             <TaskTableRow
               key={task.id}

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import getState from './getState';
 import changeState from './changeState';
+import getState from './getState';
 
 export const GET = async (req: Request, { params }: { params: { uuid: string } }) => {
   const uuid = params.uuid;

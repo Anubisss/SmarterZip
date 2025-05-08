@@ -4,9 +4,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 import { DeviceState } from '../home/types';
-import { HttpError } from './lib/httpError';
 import { REFRESH_ALL_DEVICE_STATES_INTERVAL } from './lib/constants';
 import { getDeviceState, getDeviceStates } from './lib/fetchApi';
+import { HttpError } from './lib/httpError';
 
 export const useDeviceStates = ({
   enabled = true,
@@ -23,7 +23,7 @@ export const useDeviceStates = ({
 };
 
 const getDeviceStateAndMap = async (
-  stateUuid: string
+  stateUuid: string,
 ): Promise<{ value: string; timestamp: number }> => {
   const data = await getDeviceState(stateUuid);
   return { value: data.value.value, timestamp: Date.now() };
@@ -54,7 +54,7 @@ export const useDeviceState = (stateUuid: string, refetchInterval: number | fals
                   value: result.data.value,
                 },
               }
-            : ds
+            : ds,
         );
       });
     }

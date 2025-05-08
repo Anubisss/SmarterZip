@@ -3,9 +3,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { System } from '../systems/types';
-import { HttpError } from './lib/httpError';
 import { STATIC_DATA_STALE_TIME } from './lib/constants';
 import { getSystems } from './lib/fetchApi';
+import { HttpError } from './lib/httpError';
 
 export const useSystems = () => {
   return useQuery<System[]>({

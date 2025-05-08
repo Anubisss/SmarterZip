@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
-import Footer from '../components/footer';
 import { useSelectSystem, useSystems } from '../apiHooks/systems';
+import Footer from '../components/footer';
 
 const Systems = () => {
   const router = useRouter();
@@ -21,12 +21,12 @@ const Systems = () => {
   const showLoadingIndicator = isFetching || isSelectingSystem || !systems;
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <div className="max-w-7xl mx-auto bg-white rounded-lg p-6 shadow-lg">
-        <h2 className="mb-6 text-2xl font-semibold text-center text-gray-700">Select a System</h2>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 p-4">
+      <div className="mx-auto max-w-7xl rounded-lg bg-white p-6 shadow-lg">
+        <h2 className="mb-6 text-center text-2xl font-semibold text-gray-700">Select a System</h2>
         {showLoadingIndicator && (
           <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+            <div className="h-16 w-16 animate-spin rounded-full border-t-4 border-blue-500"></div>
           </div>
         )}
         {!showLoadingIndicator && error && (
@@ -35,13 +35,13 @@ const Systems = () => {
         {!showLoadingIndicator && !error && (
           <div className="flex flex-wrap justify-center gap-6">
             {systems.map((system) => (
-              <div key={system.uuid} className="bg-gray-200 p-4 rounded-lg shadow-md">
+              <div key={system.uuid} className="rounded-lg bg-gray-200 p-4 shadow-md">
                 <h3 className="text-lg font-semibold text-gray-800">{system.name}</h3>
                 <p className="text-sm">{system.owner}</p>
                 <p className="text-sm">{system.uuid}</p>
                 <div className="mt-4 text-right">
                   <button
-                    className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-200"
+                    className="rounded bg-blue-500 px-4 py-2 text-white transition-colors duration-200 hover:bg-blue-700"
                     onClick={() => handleSystemSelect(system.uuid)}
                   >
                     Select

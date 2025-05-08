@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 
-import { ScheduledTask } from '../../types';
 import getDb from '../';
+import { ScheduledTask } from '../../types';
 
 const TABLE_NAME = 'scheduled_tasks';
 
@@ -17,7 +17,7 @@ class ScheduledTaskRepository {
 
   static getAll(): ScheduledTask[] {
     const stmt: Database.Statement<[], ScheduledTask> = getDb().prepare(
-      `SELECT * FROM "${TABLE_NAME}"`
+      `SELECT * FROM "${TABLE_NAME}"`,
     );
     return stmt.all();
   }

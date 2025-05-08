@@ -2,10 +2,10 @@
 
 import React, { FC, FormEvent, useEffect, useState } from 'react';
 
-import { Device, Room } from '../home/types';
-import BlindsIcon from '../home/devices/shutterSwitch/blindsIcon';
-import { getDeviceTypeName, getUtcTimeFromLocalTime } from './helpers';
 import { useCreateScheduledTask } from '../apiHooks/scheduledTasks';
+import BlindsIcon from '../home/devices/shutterSwitch/blindsIcon';
+import { Device, Room } from '../home/types';
+import { getDeviceTypeName, getUtcTimeFromLocalTime } from './helpers';
 
 interface Props {
   isOpen: boolean;
@@ -84,19 +84,19 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
       : undefined;
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded shadow-lg w-96 border border-black max-h-screen overflow-y-auto">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+      <div className="max-h-screen w-96 overflow-y-auto rounded border border-black bg-white p-6 shadow-lg">
         <form onSubmit={handleNewTask}>
-          <h2 className="text-2xl font-bold mb-5">New Task</h2>
+          <h2 className="mb-5 text-2xl font-bold">New Task</h2>
           <div className="mb-1">
-            <label className="block mb-2 font-bold">Room</label>
+            <label className="mb-2 block font-bold">Room</label>
             <select
               value={roomId}
               onChange={(e) => {
                 setRoomId(e.target.value);
                 setDeviceId('');
               }}
-              className="w-full mb-4 border border-gray-300 rounded p-2"
+              className="mb-4 w-full rounded border border-gray-300 p-2"
               required
             >
               <option value="" disabled hidden>
@@ -110,11 +110,11 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
             </select>
           </div>
           <div className="mb-1">
-            <label className="block mb-2 font-bold">Device</label>
+            <label className="mb-2 block font-bold">Device</label>
             <select
               value={deviceId}
               onChange={(e) => setDeviceId(e.target.value)}
-              className="w-full mb-4 border border-gray-300 rounded p-2"
+              className="mb-4 w-full rounded border border-gray-300 p-2"
               required
             >
               <option value="" disabled hidden>
@@ -128,17 +128,17 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
             </select>
           </div>
           <div className="mb-4">
-            <label className="block mb-2 font-bold">When</label>
+            <label className="mb-2 block font-bold">When</label>
             <input type="time" value={when} onChange={(e) => setWhen(e.target.value)} required />
           </div>
           <div className="mb-1">
-            <label className="block mb-2 font-bold">Action</label>
+            <label className="mb-2 block font-bold">Action</label>
             {!selectedDeviceType && <div className="mb-8">Choose room and device first.</div>}
             {selectedDeviceType === 'lampSwitch' && (
               <select
                 value={action}
                 onChange={(e) => setAction(e.target.value)}
-                className="w-full mb-4 border border-gray-300 rounded p-2"
+                className="mb-4 w-full rounded border border-gray-300 p-2"
                 required
               >
                 <option value="" disabled hidden>
@@ -154,7 +154,7 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
                   type="range"
                   min="0"
                   max="100"
-                  className="[writing-mode:vertical-lr] h-132"
+                  className="h-132 [writing-mode:vertical-lr]"
                   value={100 - +action}
                   onChange={(e) => setAction((100 - +e.target.value).toString())}
                 />
@@ -166,7 +166,7 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
           </div>
           {isPending && (
             <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+              <div className="h-16 w-16 animate-spin rounded-full border-t-4 border-blue-500"></div>
             </div>
           )}
           {!isPending && error && (
@@ -177,14 +177,14 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
           {!isPending && (
             <div className="flex justify-end space-x-4">
               <button
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                className="rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600"
                 type="button"
                 onClick={onClose}
               >
                 Cancel
               </button>
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                 type="submit"
               >
                 Add

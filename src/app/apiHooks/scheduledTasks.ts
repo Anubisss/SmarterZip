@@ -2,10 +2,10 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { HttpError } from './lib/httpError';
 import { ScheduledTaskDTO } from '../scheduler/types';
 import { SSR_DYNAMIC_DATA_STALE_TIME } from './lib/constants';
 import { getScheduledTasks } from './lib/fetchApi';
+import { HttpError } from './lib/httpError';
 
 export const useScheduledTasks = () => {
   return useQuery<ScheduledTaskDTO[]>({

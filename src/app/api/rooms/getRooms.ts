@@ -1,6 +1,6 @@
+import roomsConfig from '../config/rooms.json';
 import ZIPATO_URLS from '../constants/zipatoUrls';
 import ZipatoClient from '../lib/zipatoClient';
-import roomsConfig from '../config/rooms.json';
 
 interface Room {
   id: number;

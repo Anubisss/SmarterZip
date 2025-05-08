@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import { Device } from '../../types';
 import { useDeviceState } from '@/app/apiHooks/deviceStates';
+import { Device } from '../../types';
 
 const REFRESH_TICKS = 3;
 const REFRESH_INTERVAL = 3500;
@@ -18,7 +18,7 @@ const useStateRefreshStateUntilStable = ({ device }: UseStateRefreshStateUntilSt
 
   const { data: currentState } = useDeviceState(
     device.stateUuid,
-    shouldPoll ? REFRESH_INTERVAL : false
+    shouldPoll ? REFRESH_INTERVAL : false,
   );
 
   useEffect(() => {

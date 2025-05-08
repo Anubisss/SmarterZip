@@ -36,7 +36,7 @@ const changeState = async (uuid: string, value: string): Promise<void> => {
     if (axios.isAxiosError(ex) && ex.response) {
       // eslint-disable-next-line no-console
       console.error(
-        `(ERROR)[changeState] can't change state, uuid: ${uuid}, value: ${value}, status: ${ex.response.status}`
+        `(ERROR)[changeState] can't change state, uuid: ${uuid}, value: ${value}, status: ${ex.response.status}`,
       );
       return;
     }
@@ -73,4 +73,4 @@ const selectSystem = async (systemUuid: string): Promise<void> => {
   }
 };
 
-export { isLoginRequired, getState, changeState, login, selectSystem };
+export { changeState, getState, isLoginRequired, login, selectSystem };

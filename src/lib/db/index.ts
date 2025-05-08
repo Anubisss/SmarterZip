@@ -1,5 +1,5 @@
-import Database from 'better-sqlite3';
 import type { Database as SQLiteDatabase } from 'better-sqlite3';
+import Database from 'better-sqlite3';
 
 let dbInstance: SQLiteDatabase;
 

@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
+import React, { FC } from 'react';
 
-import Scheduler from './scheduler';
 import { getDevices, getRooms, getScheduledTasks } from '../apiHooks/lib/fetchApi';
+import Scheduler from './scheduler';
 
 const SchedulerPage: FC = async () => {
   const queryClient = new QueryClient();

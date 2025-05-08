@@ -3,13 +3,13 @@
 import React, { useMemo } from 'react';
 import { LuRefreshCw } from 'react-icons/lu';
 
-import { Device as DeviceType } from './home/types';
-import Room from './home/room';
-import Footer from './components/footer';
-import Navigation from './components/navigation';
-import { useRooms } from './apiHooks/rooms';
 import { useDevices } from './apiHooks/devices';
 import { useDeviceStates } from './apiHooks/deviceStates';
+import { useRooms } from './apiHooks/rooms';
+import Footer from './components/footer';
+import Navigation from './components/navigation';
+import Room from './home/room';
+import { Device as DeviceType } from './home/types';
 
 const getDevicesForRoom = (roomId: number, devices: DeviceType[]): DeviceType[] => {
   return devices.filter((device) => device.roomId === roomId);
@@ -43,9 +43,9 @@ const Home = () => {
   const hasError = !!roomsError || !!devicesError || !!deviceStatesError;
 
   return (
-    <div className="bg-gray-100 min-h-screen p-4">
+    <div className="min-h-screen bg-gray-100 p-4">
       <div className="container mx-auto p-4">
-        <div className="flex justify-center items-center mb-6">
+        <div className="mb-6 flex items-center justify-center">
           <h1 className="text-3xl font-bold">SmarterZip</h1>
           {!showLoadingIndicator && (
             <div
@@ -59,16 +59,16 @@ const Home = () => {
         </div>
         {showLoadingIndicator && (
           <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+            <div className="h-16 w-16 animate-spin rounded-full border-t-4 border-blue-500"></div>
           </div>
         )}
         {!showLoadingIndicator && hasError && (
-          <p className="text-xl text-red-500 text-center">
+          <p className="text-center text-xl text-red-500">
             Can&apos;t load the systems. Try reload.
           </p>
         )}
         {!showLoadingIndicator && !hasError && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {rooms.map((room) => (
               <Room
                 key={room.id}

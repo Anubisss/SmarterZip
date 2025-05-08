@@ -1,14 +1,14 @@
 'use client';
 
+import moment from 'moment';
 import React, { FC } from 'react';
 import { MdDelete } from 'react-icons/md';
-import Moment from 'react-moment';
 import { PiLampPendantFill, PiLampPendantLight } from 'react-icons/pi';
-import moment from 'moment';
+import Moment from 'react-moment';
 
-import { ScheduledTask } from './types';
-import { Device } from '../home/types';
 import BlindsIcon from '../home/devices/shutterSwitch/blindsIcon';
+import { Device } from '../home/types';
+import { ScheduledTask } from './types';
 
 interface Props {
   task: ScheduledTask;
@@ -25,13 +25,13 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
   };
 
   return (
-    <tr className="bg-white border-b hover:bg-gray-50" key={task.id}>
+    <tr className="border-b bg-white hover:bg-gray-50" key={task.id}>
       <td className="p-2 text-center">{task.roomName}</td>
       <td className="p-2 text-center">{task.deviceName}</td>
       <td className="p-2 text-center">
         <Moment format="HH:mm">{`${moment.utc().format('YYYY-MM-DD')}T${task.when}:00Z`}</Moment>
       </td>
-      <td className="p-2 text-center flex justify-center items-center">
+      <td className="flex items-center justify-center p-2 text-center">
         {device?.type === 'shutterSwitch' ? (
           <>
             <BlindsIcon value={+task.action} showHeight={false} />
@@ -40,9 +40,9 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
         ) : device?.type === 'lampSwitch' ? (
           <>
             {task.action === 'true' ? (
-              <PiLampPendantFill className="w-12 h-12 mr-1" color="#eab308" />
+              <PiLampPendantFill className="mr-1 h-12 w-12" color="#eab308" />
             ) : (
-              <PiLampPendantLight className="w-12 h-12 mr-1" />
+              <PiLampPendantLight className="mr-1 h-12 w-12" />
             )}
             <div>{task.action === 'true' ? 'Turn ON' : 'Turn OFF'}</div>
           </>
@@ -58,10 +58,10 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
           '-'
         )}
       </td>
-      <td className="p-2 h-full">
+      <td className="h-full p-2">
         <div className="flex h-full items-center justify-center">
           <MdDelete
-            className="w-6 h-6 cursor-pointer hover:text-gray-500"
+            className="h-6 w-6 cursor-pointer hover:text-gray-500"
             onClick={() => onDeleteIconClick(task.id)}
           />
         </div>

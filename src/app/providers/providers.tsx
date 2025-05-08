@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
 
 import GlobalQueryErrorHandler from './globalQueryErrorHandler';
 import getQueryClient from './queryClient';

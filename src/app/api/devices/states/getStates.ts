@@ -1,5 +1,5 @@
-import ZIPATO_URLS from '../../constants/zipatoUrls';
 import { State } from '@/lib/types';
+import ZIPATO_URLS from '../../constants/zipatoUrls';
 import ZipatoClient from '../../lib/zipatoClient';
 
 const getStates = async (): Promise<State[]> => {

@@ -1,7 +1,7 @@
-import { ScheduledTaskDTO } from '@/app/scheduler/types';
-import fetchJson from './fetchJson';
 import { Device, DeviceState, Room } from '@/app/home/types';
+import { ScheduledTaskDTO } from '@/app/scheduler/types';
 import { System } from '@/app/systems/types';
+import fetchJson from './fetchJson';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 

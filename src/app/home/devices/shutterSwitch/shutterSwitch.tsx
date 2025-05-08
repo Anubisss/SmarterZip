@@ -2,10 +2,10 @@
 
 import React, { FC } from 'react';
 
+import { useChangeDeviceState } from '@/app/apiHooks/deviceStates';
 import { Device } from '../../types';
 import BlindsIcon from './blindsIcon';
 import useStateRefreshStateUntilStable from './useStateRefreshStateUntilStable';
-import { useChangeDeviceState } from '@/app/apiHooks/deviceStates';
 interface Props {
   device: Device;
   isRefreshingDeviceStates: boolean;
@@ -33,12 +33,12 @@ const ShutterSwitch: FC<Props> = ({ device, isRefreshingDeviceStates }) => {
   return (
     <div className="mt-2 flex items-center">
       {(isRefreshingDeviceStates || isChangingDeviceState) && (
-        <div className="flex items-center justify-center mr-4 h-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+        <div className="mr-4 flex h-20 items-center justify-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-t-4 border-blue-500"></div>
         </div>
       )}
       {!isRefreshingDeviceStates && !isChangingDeviceState && error && (
-        <div className="text-lg text-red-500 max-w-32 border text-center p-2 mr-2 rounded-lg">
+        <div className="mr-2 max-w-32 rounded-lg border p-2 text-center text-lg text-red-500">
           Can&apos;t change the state. Try reload.
         </div>
       )}

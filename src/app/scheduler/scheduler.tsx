@@ -2,15 +2,15 @@
 
 import React, { FC, useEffect, useMemo, useState } from 'react';
 
-import TaskModal from './taskModal';
-import Footer from '../components/footer';
-import { ScheduledTask } from './types';
-import { getDeviceName, getRoomName, sortTasks } from './helpers';
-import TaskTable from './taskTable';
-import Navigation from '../components/navigation';
-import { useDeleteScheduledTask, useScheduledTasks } from '../apiHooks/scheduledTasks';
-import { useRooms } from '../apiHooks/rooms';
 import { useDevices } from '../apiHooks/devices';
+import { useRooms } from '../apiHooks/rooms';
+import { useDeleteScheduledTask, useScheduledTasks } from '../apiHooks/scheduledTasks';
+import Footer from '../components/footer';
+import Navigation from '../components/navigation';
+import { getDeviceName, getRoomName, sortTasks } from './helpers';
+import TaskModal from './taskModal';
+import TaskTable from './taskTable';
+import { ScheduledTask } from './types';
 
 const Scheduler: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,24 +52,24 @@ const Scheduler: FC = () => {
   const hasError = !!tasksError || !!roomsError || !!devicesError || !!deleteScheduledTaskError;
 
   return (
-    <div className="bg-gray-100 min-h-screen p-4">
+    <div className="min-h-screen bg-gray-100 p-4">
       <h1 className="text-center text-3xl font-bold">Scheduler</h1>
       {showLoadingIndicator && (
         <div className="mt-8 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+          <div className="h-16 w-16 animate-spin rounded-full border-t-4 border-blue-500"></div>
         </div>
       )}
       {!showLoadingIndicator && hasError && (
-        <div className="mt-8 text-xl text-red-500 text-center">
+        <div className="mt-8 text-center text-xl text-red-500">
           Can&apos;t load scheduler. Try reload.
         </div>
       )}
       {!showLoadingIndicator && !hasError && (
         <div className="my-8">
-          <h3 className="text-2xl text-center">Tasks</h3>
-          <div className="text-center mt-2 mb-8">
+          <h3 className="text-center text-2xl">Tasks</h3>
+          <div className="mb-8 mt-2 text-center">
             <button
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-200"
+              className="rounded bg-blue-500 px-4 py-2 text-white transition-colors duration-200 hover:bg-blue-700"
               onClick={() => setIsModalOpen(true)}
             >
               New task

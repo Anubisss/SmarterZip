@@ -41,13 +41,13 @@ const executeTasks = async (stopIfLoginRequired = false) => {
       await changeState(task.deviceStateUuid, task.action);
       // eslint-disable-next-line no-console
       console.log(
-        `[executeTasks] state changed, taskId: ${task.id}, roomId: ${task.roomId}, deviceId: ${task.deviceId}, currentValue: ${value}, action: ${task.action}`
+        `[executeTasks] state changed, taskId: ${task.id}, roomId: ${task.roomId}, deviceId: ${task.deviceId}, currentValue: ${value}, action: ${task.action}`,
       );
     } else {
       ScheduledTaskRepository.updateLastExecutedAt(task.id, now);
       // eslint-disable-next-line no-console
       console.log(
-        `[executeTasks] task executed, taskId: ${task.id}, roomId: ${task.roomId}, deviceId: ${task.deviceId}, currentValue: ${value}, action: ${task.action}`
+        `[executeTasks] task executed, taskId: ${task.id}, roomId: ${task.roomId}, deviceId: ${task.deviceId}, currentValue: ${value}, action: ${task.action}`,
       );
     }
   }

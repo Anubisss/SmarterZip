@@ -35,8 +35,8 @@ const getDeviceName = (devices: Device[], deviceId: number): string => {
 
 const sortTasks = (tasks: ScheduledTask[]): void => {
   tasks.sort(
-    (a, b) => a.roomId - b.roomId || a.deviceId - b.deviceId || a.when.localeCompare(b.when)
+    (a, b) => a.roomId - b.roomId || a.deviceId - b.deviceId || a.when.localeCompare(b.when),
   );
 };
 
-export { getDeviceTypeName, getUtcTimeFromLocalTime, getRoomName, getDeviceName, sortTasks };
+export { getDeviceName, getDeviceTypeName, getRoomName, getUtcTimeFromLocalTime, sortTasks };

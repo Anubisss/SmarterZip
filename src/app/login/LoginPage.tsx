@@ -1,11 +1,11 @@
 'use client';
 
-import React, { FormEvent, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import React, { FormEvent, useEffect, useState } from 'react';
 
-import Footer from '../components/footer';
-import { useLogin } from '../apiHooks/login';
 import { useDeviceStates } from '../apiHooks/deviceStates';
+import { useLogin } from '../apiHooks/login';
+import Footer from '../components/footer';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -45,9 +45,9 @@ const Login = () => {
   const showLoadingIndicator = isFetchingDeviceStates || isLoggingIn;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-sm p-6 bg-white rounded-md shadow-md">
-        <h2 className="mb-6 text-2xl font-semibold text-center text-gray-700">Login</h2>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
+      <div className="w-full max-w-sm rounded-md bg-white p-6 shadow-md">
+        <h2 className="mb-6 text-center text-2xl font-semibold text-gray-700">Login</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600" htmlFor="email">
@@ -55,7 +55,7 @@ const Login = () => {
             </label>
             <input
               type="email"
-              className="w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
+              className="mt-1 w-full rounded-md border bg-gray-200 px-3 py-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring"
               placeholder="Enter your Zipato email"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
@@ -67,7 +67,7 @@ const Login = () => {
             </label>
             <input
               type="password"
-              className="w-full px-3 py-2 mt-1 text-gray-700 bg-gray-200 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
+              className="mt-1 w-full rounded-md border bg-gray-200 px-3 py-2 text-gray-700 focus:border-blue-500 focus:outline-none focus:ring"
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
@@ -75,7 +75,7 @@ const Login = () => {
           </div>
           {showLoadingIndicator && (
             <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+              <div className="h-16 w-16 animate-spin rounded-full border-t-4 border-blue-500"></div>
             </div>
           )}
           {!showLoadingIndicator && loginError && (
@@ -86,7 +86,7 @@ const Login = () => {
           {!showLoadingIndicator && (
             <button
               type="submit"
-              className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+              className="w-full rounded-md bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
             >
               Login
             </button>

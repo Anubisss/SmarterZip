@@ -3,8 +3,8 @@
 import React, { FC } from 'react';
 import { PiLampPendantFill, PiLampPendantLight } from 'react-icons/pi';
 
-import { Device } from '../types';
 import { useChangeDeviceState } from '@/app/apiHooks/deviceStates';
+import { Device } from '../types';
 
 interface Props {
   device: Device;
@@ -33,21 +33,21 @@ const LampSwitch: FC<Props> = ({ device, isRefreshingDeviceStates }) => {
   return (
     <div className="mt-2 flex items-center">
       {(isRefreshingDeviceStates || isChangingDeviceState) && (
-        <div className="flex items-center justify-center mr-2 p-1">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+        <div className="mr-2 flex items-center justify-center p-1">
+          <div className="h-12 w-12 animate-spin rounded-full border-t-4 border-blue-500"></div>
         </div>
       )}
       {!isRefreshingDeviceStates && !isChangingDeviceState && error && (
-        <div className="text-lg text-red-500 max-w-32 border text-center p-2 mr-2 rounded-lg">
+        <div className="mr-2 max-w-32 rounded-lg border p-2 text-center text-lg text-red-500">
           Can&apos;t change the state. Try reload.
         </div>
       )}
       {!isRefreshingDeviceStates && !isChangingDeviceState && !error && (
-        <div onClick={handleToggleClick} className="mr-2 p-1 cursor-pointer">
+        <div onClick={handleToggleClick} className="mr-2 cursor-pointer p-1">
           {isOn ? (
-            <PiLampPendantFill className="w-12 h-12" color="#eab308" />
+            <PiLampPendantFill className="h-12 w-12" color="#eab308" />
           ) : (
-            <PiLampPendantLight className="w-12 h-12" />
+            <PiLampPendantLight className="h-12 w-12" />
           )}
         </div>
       )}

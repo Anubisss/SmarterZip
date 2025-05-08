@@ -1,8 +1,8 @@
+import devicesConfigImport from '../config/devices.json';
+import ignoredDevicesConfigImport from '../config/ignoredDevices.json';
+import roomsConfigImport from '../config/rooms.json';
 import ZIPATO_URLS from '../constants/zipatoUrls';
 import ZipatoClient from '../lib/zipatoClient';
-import roomsConfigImport from '../config/rooms.json';
-import ignoredDevicesConfigImport from '../config/ignoredDevices.json';
-import devicesConfigImport from '../config/devices.json';
 
 const roomsConfig: { id: number; name: string }[] = roomsConfigImport;
 const ignoredDevicesConfig: number[] = ignoredDevicesConfigImport;
@@ -60,7 +60,7 @@ const getDevices = async (): Promise<Device[]> => {
       (device: AbilityZipato) =>
         device.fields.room === room.id &&
         convertDeviceType(device.description) &&
-        !isDeviceIgnored(device.id)
+        !isDeviceIgnored(device.id),
     );
 
     for (const deviceInTheRoom of devicesInTheRoom) {

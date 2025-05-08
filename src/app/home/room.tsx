@@ -2,8 +2,8 @@
 
 import React, { FC } from 'react';
 
-import { Room as RoomType, Device as DeviceType } from './types';
 import Device from './devices/device';
+import { Device as DeviceType, Room as RoomType } from './types';
 
 interface Props {
   room: RoomType;
@@ -14,7 +14,7 @@ interface Props {
 const Room: FC<Props> = ({ room, devices, isRefreshingDeviceStates }) => {
   return (
     <div
-      className={`p-4 rounded-lg shadow-md border border-gray-400 ${
+      className={`rounded-lg border border-gray-400 p-4 shadow-md ${
         room.connected ? 'bg-white' : 'bg-gray-300'
       }`}
     >

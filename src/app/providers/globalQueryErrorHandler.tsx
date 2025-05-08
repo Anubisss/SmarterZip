@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 import { QueryClient } from '@tanstack/react-query';
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
 
 import { HttpError } from '../apiHooks/lib/httpError';
 

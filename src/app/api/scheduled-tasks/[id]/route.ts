@@ -14,7 +14,7 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
   } catch (ex: any) {
     return NextResponse.json(
       { name: ex.name, message: ex.toString(), code: ex.code },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };

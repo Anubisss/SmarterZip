@@ -10,7 +10,7 @@ export const GET = async () => {
   } catch (ex: any) {
     return NextResponse.json(
       { name: ex.name, message: ex.toString(), code: ex.code },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };
@@ -35,7 +35,7 @@ export const POST = async (req: Request) => {
   } catch (ex: any) {
     return NextResponse.json(
       { name: ex.name, message: ex.toString(), code: ex.code },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
