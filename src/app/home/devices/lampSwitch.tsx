@@ -34,7 +34,10 @@ const LampSwitch: FC<Props> = ({ device, isRefreshingDeviceStates }) => {
     <div className="mt-2 flex items-center">
       {(isRefreshingDeviceStates || isChangingDeviceState) && (
         <div className="mr-2 flex items-center justify-center p-1">
-          <div className="h-12 w-12 animate-spin rounded-full border-t-4 border-blue-500"></div>
+          <div
+            className="h-12 w-12 animate-spin rounded-full border-t-4 border-blue-500"
+            data-testid="spinner"
+          ></div>
         </div>
       )}
       {!isRefreshingDeviceStates && !isChangingDeviceState && error && (
@@ -45,9 +48,13 @@ const LampSwitch: FC<Props> = ({ device, isRefreshingDeviceStates }) => {
       {!isRefreshingDeviceStates && !isChangingDeviceState && !error && (
         <div onClick={handleToggleClick} className="mr-2 cursor-pointer p-1">
           {isOn ? (
-            <PiLampPendantFill className="h-12 w-12" color="#eab308" />
+            <PiLampPendantFill
+              className="h-12 w-12"
+              color="#eab308"
+              aria-label="Lamp is on, click to turn off"
+            />
           ) : (
-            <PiLampPendantLight className="h-12 w-12" />
+            <PiLampPendantLight className="h-12 w-12" aria-label="Lamp is off, click to turn on" />
           )}
         </div>
       )}

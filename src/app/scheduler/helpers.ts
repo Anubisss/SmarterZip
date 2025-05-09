@@ -12,8 +12,7 @@ const getDeviceTypeName = (type: Device['type']): string => {
   }
 };
 
-const getUtcTimeFromLocalTime = (time: string): string => {
-  const date = new Date(`1970-01-01T${time}`);
+const getUtcTimeFromLocalTime = (date: Date): string => {
   return `${date.getUTCHours().toString().padStart(2, '0')}:${date
     .getUTCMinutes()
     .toString()

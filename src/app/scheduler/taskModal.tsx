@@ -42,11 +42,14 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
       return;
     }
 
+    const utcDateStr = new Date().toISOString().split('T')[0];
+    const localDate = new Date(`${utcDateStr}T${when}`);
+
     await createScheduledTask({
       roomId: +roomId,
       deviceId: +deviceId,
       deviceStateUuid: device.stateUuid,
-      when: getUtcTimeFromLocalTime(when),
+      when: getUtcTimeFromLocalTime(localDate),
       action,
     });
     onClose();

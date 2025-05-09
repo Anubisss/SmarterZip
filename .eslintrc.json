@@ -5,10 +5,14 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:@tanstack/eslint-plugin-query/recommended",
+    "plugin:jest/recommended",
     "prettier"
   ],
-  "plugins": ["react", "react-hooks", "@typescript-eslint", "@tanstack/query"],
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "@tanstack/query", "jest"],
   "parser": "@typescript-eslint/parser",
+  "env": {
+    "jest/globals": true
+  },
   "rules": {
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error",
