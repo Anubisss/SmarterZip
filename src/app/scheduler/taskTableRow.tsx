@@ -1,10 +1,7 @@
-'use client';
-
 import moment from 'moment';
 import React, { FC } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { PiLampPendantFill, PiLampPendantLight } from 'react-icons/pi';
-import Moment from 'react-moment';
 
 import BlindsIcon from '../home/devices/shutterSwitch/blindsIcon';
 import { Device } from '../home/types';
@@ -31,8 +28,11 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
     >
       <td className="p-2 text-center">{task.roomName}</td>
       <td className="p-2 text-center">{task.deviceName}</td>
-      <td className="p-2 text-center">
-        <Moment format="HH:mm">{`${moment.utc().format('YYYY-MM-DD')}T${task.when}:00Z`}</Moment>
+      <td className="p-2 text-center" suppressHydrationWarning>
+        {moment
+          .utc(`${moment.utc().format('YYYY-MM-DD')}T${task.when}:00Z`)
+          .local()
+          .format('HH:mm')}
       </td>
       <td className="flex items-center justify-center p-2 text-center">
         {device?.type === 'shutterSwitch' ? (
@@ -51,15 +51,13 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
           </>
         ) : null}
       </td>
-      <td className="p-2 text-center">
-        <Moment format="YYYY MMMM DD, HH:mm:ss">{task.createdAt}</Moment>
+      <td className="p-2 text-center" suppressHydrationWarning>
+        {moment.utc(task.createdAt).local().format('YYYY MMMM DD, HH:mm:ss')}
       </td>
-      <td className="p-2 text-center">
-        {task.lastExecutedAt ? (
-          <Moment format="YYYY MMMM DD, HH:mm:ss">{task.lastExecutedAt}</Moment>
-        ) : (
-          '-'
-        )}
+      <td className="p-2 text-center" suppressHydrationWarning>
+        {task.lastExecutedAt
+          ? moment.utc(task.lastExecutedAt).local().format('YYYY MMMM DD, HH:mm:ss')
+          : '-'}
       </td>
       <td className="h-full p-2">
         <div className="flex h-full items-center justify-center">
