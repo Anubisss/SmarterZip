@@ -43,7 +43,7 @@ const Home = () => {
   const hasError = !!roomsError || !!devicesError || !!deviceStatesError;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-gray-100 p-4 dark:bg-gray-900 dark:text-gray-300">
       <div className="container mx-auto p-4">
         <div className="mb-6 flex items-center justify-center">
           <h1 className="text-3xl font-bold">SmarterZip</h1>

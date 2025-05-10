@@ -25,7 +25,10 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
   };
 
   return (
-    <tr className="border-b bg-white hover:bg-gray-50" key={task.id}>
+    <tr
+      className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+      key={task.id}
+    >
       <td className="p-2 text-center">{task.roomName}</td>
       <td className="p-2 text-center">{task.deviceName}</td>
       <td className="p-2 text-center">

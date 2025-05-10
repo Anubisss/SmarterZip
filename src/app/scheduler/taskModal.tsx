@@ -87,8 +87,8 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
       : undefined;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="max-h-screen w-96 overflow-y-auto rounded border border-black bg-white p-6 shadow-lg">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-60">
+      <div className="max-h-screen w-96 overflow-y-auto rounded border border-black bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
         <form onSubmit={handleNewTask}>
           <h2 className="mb-5 text-2xl font-bold">New Task</h2>
           <div className="mb-1">
@@ -99,7 +99,7 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
                 setRoomId(e.target.value);
                 setDeviceId('');
               }}
-              className="mb-4 w-full rounded border border-gray-300 p-2"
+              className="mb-4 w-full rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-900"
               required
             >
               <option value="" disabled hidden>
@@ -117,7 +117,7 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
             <select
               value={deviceId}
               onChange={(e) => setDeviceId(e.target.value)}
-              className="mb-4 w-full rounded border border-gray-300 p-2"
+              className="mb-4 w-full rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-900"
               required
             >
               <option value="" disabled hidden>
@@ -132,7 +132,13 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
           </div>
           <div className="mb-4">
             <label className="mb-2 block font-bold">When</label>
-            <input type="time" value={when} onChange={(e) => setWhen(e.target.value)} required />
+            <input
+              type="time"
+              value={when}
+              onChange={(e) => setWhen(e.target.value)}
+              required
+              className="dark:bg-gray-800"
+            />
           </div>
           <div className="mb-1">
             <label className="mb-2 block font-bold">Action</label>
@@ -141,7 +147,7 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
               <select
                 value={action}
                 onChange={(e) => setAction(e.target.value)}
-                className="mb-4 w-full rounded border border-gray-300 p-2"
+                className="mb-4 w-full rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-900"
                 required
               >
                 <option value="" disabled hidden>
@@ -180,14 +186,14 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
           {!isPending && (
             <div className="flex justify-end space-x-4">
               <button
-                className="rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600"
+                className="rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600 dark:bg-gray-700 dark:text-gray-300"
                 type="button"
                 onClick={onClose}
               >
                 Cancel
               </button>
               <button
-                className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 dark:bg-blue-800 dark:text-gray-300 dark:hover:bg-blue-700"
                 type="submit"
               >
                 Add

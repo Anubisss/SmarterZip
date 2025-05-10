@@ -52,7 +52,7 @@ const Scheduler: FC = () => {
   const hasError = !!tasksError || !!roomsError || !!devicesError || !!deleteScheduledTaskError;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-gray-100 p-4 dark:bg-gray-900 dark:text-gray-300">
       <h1 className="text-center text-3xl font-bold">Scheduler</h1>
       {showLoadingIndicator && (
         <div className="mt-8 flex items-center justify-center">
@@ -69,7 +69,7 @@ const Scheduler: FC = () => {
           <h3 className="text-center text-2xl">Tasks</h3>
           <div className="mb-8 mt-2 text-center">
             <button
-              className="rounded bg-blue-500 px-4 py-2 text-white transition-colors duration-200 hover:bg-blue-700"
+              className="rounded bg-blue-500 px-4 py-2 text-white transition-colors duration-200 hover:bg-blue-700 dark:bg-blue-800 dark:text-gray-300 dark:hover:bg-blue-600"
               onClick={() => setIsModalOpen(true)}
             >
               New task

@@ -15,8 +15,8 @@ interface Props {
 const TaskTable: FC<Props> = ({ tasks, devices, onDeleteTask }) => {
   return (
     <div className="mx-auto max-w-[1600px] overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 border">
-        <thead className="bg-gray-50">
+      <table className="min-w-full divide-y divide-gray-200 border dark:divide-gray-700 dark:border-gray-600">
+        <thead className="bg-gray-50 dark:bg-gray-900">
           <tr>
             <th className="p-3">Room</th>
             <th className="p-3">Device</th>
@@ -27,7 +27,7 @@ const TaskTable: FC<Props> = ({ tasks, devices, onDeleteTask }) => {
             <th className="p-3">Delete</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 bg-white">
+        <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
           {tasks.map((task) => (
             <TaskTableRow
               key={task.id}
