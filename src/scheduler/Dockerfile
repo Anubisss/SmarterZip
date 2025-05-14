@@ -4,8 +4,7 @@ WORKDIR /app
 
 COPY . ./
 
-RUN npm ci
-RUN npm run scheduler:build
+RUN npm ci && npm run scheduler:build
 
 FROM node:20-alpine AS runner
 
