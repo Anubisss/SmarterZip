@@ -129,6 +129,45 @@ SCHEDULER_LOGIN_SYSTEM_UUID=id-ad-f \
 docker-compose up --build -d
 ```
 
+### Kubernetes / minikube
+
+Load your local Docker images into minikube
+
+```
+minikube image load smarterzip-web:latest
+minikube image load smarterzip-scheduler:latest
+```
+
+Create an empty SQLite DB
+
+```
+minikube ssh
+sudo mkdir -p /mnt/data/databases/sqlite
+touch SmarterZip.sqlite3
+exit
+```
+
+Create resources
+
+```
+kubectl apply -Rf k8s/
+```
+
+Don't forget to change the secrets!
+
+```
+Use kubectl or minikube dashboard
+```
+
+Forward the web port if needed
+
+```
+kubectl port-forward svc/web 8484:3000 -n smarterzip
+```
+
+After this you can access the web on http://127.0.0.1:8484/
+Don't forget to set NEXT_PUBLIC_API_URL=http://127.0.0.1:8484/api during Docker build
+
 ### License
 
 The MIT License (MIT)

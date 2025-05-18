@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: smarterzip
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: smarterzip-web:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: smarterzip-config
+          volumeMounts:
+            - name: db-volume
+              mountPath: /app/db
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '250m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            claimName: smarterzip-db-pvc
