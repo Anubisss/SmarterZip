@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dynamic from 'next/dynamic';
 import React, { FC } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { PiLampPendantFill, PiLampPendantLight } from 'react-icons/pi';
@@ -6,6 +6,13 @@ import { PiLampPendantFill, PiLampPendantLight } from 'react-icons/pi';
 import BlindsIcon from '../home/devices/shutterSwitch/blindsIcon';
 import { Device } from '../home/types';
 import { ScheduledTask } from './types';
+
+const LocalTime = dynamic(() => import('./localTime'), {
+  ssr: false,
+  loading: () => (
+    <div className="mx-auto h-8 w-8 animate-spin rounded-full border-t-2 border-blue-500"></div>
+  ),
+});
 
 interface Props {
   task: ScheduledTask;
@@ -28,11 +35,8 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
     >
       <td className="p-2 text-center">{task.roomName}</td>
       <td className="p-2 text-center">{task.deviceName}</td>
-      <td className="p-2 text-center" suppressHydrationWarning>
-        {moment
-          .utc(`${moment.utc().format('YYYY-MM-DD')}T${task.when}:00Z`)
-          .local()
-          .format('HH:mm')}
+      <td className="p-2 text-center">
+        <LocalTime time={task.when} format="HH:mm" />
       </td>
       <td className="flex items-center justify-center p-2 text-center">
         {device?.type === 'shutterSwitch' ? (
@@ -51,13 +55,15 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
           </>
         ) : null}
       </td>
-      <td className="p-2 text-center" suppressHydrationWarning>
-        {moment.utc(task.createdAt).local().format('YYYY MMMM DD, HH:mm:ss')}
+      <td className="p-2 text-center">
+        <LocalTime dateTime={task.createdAt} format="YYYY MMMM DD, HH:mm:ss" />
       </td>
-      <td className="p-2 text-center" suppressHydrationWarning>
-        {task.lastExecutedAt
-          ? moment.utc(task.lastExecutedAt).local().format('YYYY MMMM DD, HH:mm:ss')
-          : '-'}
+      <td className="p-2 text-center">
+        {task.lastExecutedAt ? (
+          <LocalTime dateTime={task.lastExecutedAt} format="YYYY MMMM DD, HH:mm:ss" />
+        ) : (
+          '-'
+        )}
       </td>
       <td className="h-full p-2">
         <div className="flex h-full items-center justify-center">

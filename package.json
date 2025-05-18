@@ -15,8 +15,8 @@
     "check-all": "rm -rf .next && npm run lint && npm run type-check && npm run prettier && npm run build && npm run scheduler:build && npm audit && npm run test && npm run lint:dockerfiles",
     "prepare": "husky",
     "prettier": "prettier --check .",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "TZ=UTC jest",
+    "test:watch": "TZ=UTC jest --watch"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.66.0",
