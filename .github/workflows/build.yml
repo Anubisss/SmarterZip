@@ -35,7 +35,7 @@ jobs:
         run: npm run build && npm run scheduler:build
 
       - name: Audit
-        run: npm run audit
+        run: npm audit
 
       - name: Run tests
         run: npm run test
@@ -45,3 +45,9 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker web image
+        run: docker build -t smarterzip-web -f src/app/Dockerfile .
+
+      - name: Build Docker scheduler image
+        run: docker build -t smarterzip-scheduler -f src/scheduler/Dockerfile .
