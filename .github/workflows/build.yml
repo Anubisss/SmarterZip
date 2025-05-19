@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
 
     steps:
       - name: Checkout code
@@ -47,7 +49,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker web image
-        run: docker build -t smarterzip-web -f src/app/Dockerfile .
+        run: docker build --build-arg NEXT_PUBLIC_API_URL=http://localhost:6613/api -t smarterzip-web -f src/app/Dockerfile .
 
       - name: Build Docker scheduler image
         run: docker build -t smarterzip-scheduler -f src/scheduler/Dockerfile .
