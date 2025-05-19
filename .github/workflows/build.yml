@@ -25,6 +25,12 @@ jobs:
       - name: Lint
         run: npm run lint && npm run prettier
 
+      - name: Create dummy config files
+        run: |
+          cp src/app/api/config/devices.json.example src/app/api/config/devices.json
+          cp src/app/api/config/ignoredDevices.json.example src/app/api/config/ignoredDevices.json
+          cp src/app/api/config/rooms.json.example src/app/api/config/rooms.json
+
       - name: Build
         run: npm run build && npm run scheduler:build
 
@@ -36,3 +42,6 @@ jobs:
 
       - name: Lint Dockerfiles
         run: npm run lint:dockerfiles
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
