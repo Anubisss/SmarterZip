@@ -1,0 +1,32 @@
+name: PR checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create dummy config files
+        run: |
+          cp src/app/api/config/devices.json.example src/app/api/config/devices.json
+          cp src/app/api/config/ignoredDevices.json.example src/app/api/config/ignoredDevices.json
+          cp src/app/api/config/rooms.json.example src/app/api/config/rooms.json
+
+      - name: Run check-all
+        run: npm run check-all

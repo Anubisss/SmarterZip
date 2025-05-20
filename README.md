@@ -117,6 +117,8 @@ npm run scheduler:prod
 
 ### Docker
 
+Build images locally via compose and start them.
+
 ```
 HOST_PORT=6613 \
 NEXT_PUBLIC_API_URL=http://yourip:6613/api
@@ -127,6 +129,39 @@ SCHEDULER_LOGIN_EMAIL=mai@l.com \
 SCHEDULER_LOGIN_PASSWORD=pass \
 SCHEDULER_LOGIN_SYSTEM_UUID=id-ad-f \
 docker-compose up --build -d
+```
+
+### Docker (pre-built)
+
+Use pre-built images and start them.
+
+Sadly this won't work becase the web image contains dummy config files (rooms.json, etc.).
+TODO: move these config files out of the image.
+
+```
+docker pull ghcr.io/anubisss/smarterzip-web:latest
+docker pull ghcr.io/anubisss/smarterzip-scheduler:latest
+
+docker run -d \
+  --name smarterzip-web \
+  --restart unless-stopped \
+  -e DATABASE_PATH=/app/db/SmarterZip.sqlite3 \
+  -e DATABASE_LOGGING_ENABLED=false \
+  -v /Users/abc/dev/SmarterZip.sqlite3:/app/db/SmarterZip.sqlite3 \
+  -p 6613:3000 \
+  ghcr.io/anubisss/smarterzip-web:latest
+
+docker run -d \
+  --name smarterzip-scheduler \
+  --restart unless-stopped \
+  -e DATABASE_PATH=/app/db/SmarterZip.sqlite3 \
+  -e DATABASE_LOGGING_ENABLED=false \
+  -e API_URL=http://localhost:6613/api \
+  -e SCHEDULER_LOGIN_EMAIL=mai@l.com \
+  -e SCHEDULER_LOGIN_PASSWORD=pass \
+  -e SCHEDULER_LOGIN_SYSTEM_UUID=id-ad-f \
+  -v /Users/abc/dev/SmarterZip.sqlite3:/app/db/SmarterZip.sqlite3 \
+  ghcr.io/anubisss/smarterzip-scheduler:latest
 ```
 
 ### Kubernetes / minikube
