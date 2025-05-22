@@ -3,12 +3,11 @@
     "next/core-web-vitals",
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:@tanstack/eslint-plugin-query/recommended",
     "plugin:jest/recommended",
     "prettier"
   ],
-  "plugins": ["react", "react-hooks", "@typescript-eslint", "@tanstack/query", "jest"],
+  "plugins": ["react", "@typescript-eslint", "@tanstack/query", "jest"],
   "parser": "@typescript-eslint/parser",
   "env": {
     "jest/globals": true

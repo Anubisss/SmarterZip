@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:20.15.0-alpine AS builder
 
 WORKDIR /app
 
@@ -6,12 +6,14 @@ COPY . ./
 
 RUN npm ci && npm run scheduler:build
 
-FROM node:20-alpine AS runner
+FROM node:20.15.0-alpine AS runner
 
 WORKDIR /app
 
-COPY --from=builder /app/package.json .
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+COPY --chown=node:node --from=builder /app/package.json .
+COPY --chown=node:node --from=builder /app/package-lock.json .
+COPY --chown=node:node --from=builder /app/dist ./dist
+
+RUN npm ci --omit=dev
 
 CMD ["npm", "run", "scheduler:prod"]
