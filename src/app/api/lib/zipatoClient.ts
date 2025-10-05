@@ -8,7 +8,14 @@ class ZipatoClient {
 
   private constructor() {
     this.jar = new CookieJar();
-    this.client = wrapper(axios.create({ jar: this.jar }));
+    this.client = wrapper(
+      axios.create({
+        jar: this.jar,
+        headers: {
+          Accept: 'application/json',
+        },
+      }),
+    );
   }
 
   public static getInstance(): ZipatoClient {

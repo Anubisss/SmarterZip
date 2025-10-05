@@ -1,4 +1,3 @@
-import { HttpError } from '../../apiHooks/lib/httpError';
 import devicesConfigImport from '../config/devices.json';
 import ignoredDevicesConfigImport from '../config/ignoredDevices.json';
 import roomsConfigImport from '../config/rooms.json';
@@ -54,9 +53,6 @@ const getDeviceName = (device: AbilityZipato): string => {
 
 const getDevices = async (): Promise<Device[]> => {
   const res = await ZipatoClient.getInstance().getClient().get(ZIPATO_URLS.getAbilities);
-  if (res.headers['content-type'] !== 'application/json') {
-    throw new HttpError(401, 'Invalid content type: probably not logged in');
-  }
 
   const devices: Device[] = [];
   for (const room of roomsConfig) {

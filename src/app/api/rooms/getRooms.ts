@@ -1,4 +1,3 @@
-import { HttpError } from '../../apiHooks/lib/httpError';
 import roomsConfig from '../config/rooms.json';
 import ZIPATO_URLS from '../constants/zipatoUrls';
 import ZipatoClient from '../lib/zipatoClient';
@@ -13,9 +12,6 @@ type RoomZipato = Omit<Room, 'connected'>;
 
 const getRooms = async (): Promise<Room[]> => {
   const res = await ZipatoClient.getInstance().getClient().get(ZIPATO_URLS.getRooms);
-  if (res.headers['content-type'] !== 'application/json') {
-    throw new HttpError(401, 'Invalid content type: probably not logged in');
-  }
 
   const rooms = [];
   for (const roomConfig of roomsConfig) {
