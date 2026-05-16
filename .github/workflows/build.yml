@@ -68,7 +68,7 @@ jobs:
       - name: Build and push web Docker image
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           context: .
           file: src/app/Dockerfile
           push: true
@@ -77,7 +77,7 @@ jobs:
       - name: Build and push scheduler Docker image
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           context: .
           file: src/scheduler/Dockerfile
           push: true
