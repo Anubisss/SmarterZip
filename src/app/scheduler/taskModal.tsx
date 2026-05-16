@@ -38,7 +38,10 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
     if (device.type === 'lampSwitch' && action !== 'true' && action !== 'false') {
       return;
     }
-    if (device.type === 'shutterSwitch' && (+action < 0 || +action > 100)) {
+    if (
+      device.type === 'shutterSwitch' &&
+      (Number.isNaN(+action) || +action < 0 || +action > 100)
+    ) {
       return;
     }
 
@@ -164,7 +167,7 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
                   min="0"
                   max="100"
                   className="h-132 [writing-mode:vertical-lr]"
-                  value={100 - +action}
+                  value={isNaN(+action) ? 50 : 100 - +action}
                   onChange={(e) => setAction((100 - +e.target.value).toString())}
                 />
                 <span className="ml-8">
