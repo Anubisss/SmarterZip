@@ -79,6 +79,34 @@ export const useCreateScheduledTask = () => {
   });
 };
 
+interface UpdateScheduledTask {
+  id: number;
+  action: string;
+  when: string;
+}
+
+const updateScheduledTask = async ({ id, action, when }: UpdateScheduledTask): Promise<void> => {
+  const response = await fetch(`/api/scheduled-tasks/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action, when }),
+  });
+  if (!response.ok) {
+    throw new HttpError(response.status, response.statusText);
+  }
+};
+
+export const useUpdateScheduledTask = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, UpdateScheduledTask>({
+    mutationFn: updateScheduledTask,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({ queryKey: ['scheduledTasks'] });
+    },
+  });
+};
+
 const toggleScheduledTaskActive = async (id: number): Promise<void> => {
   const response = await fetch(`/api/scheduled-tasks/${id}`, {
     method: 'PATCH',

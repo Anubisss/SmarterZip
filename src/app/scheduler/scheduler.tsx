@@ -18,6 +18,7 @@ import { ScheduledTask } from './types';
 
 const Scheduler: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
 
   const { data: tasksData, error: tasksError } = useScheduledTasks();
   const { data: rooms, error: roomsError } = useRooms();
@@ -50,13 +51,15 @@ const Scheduler: FC = () => {
     return scheduledTasks;
   }, [devices, rooms, tasksData]);
 
+  const isModalVisible = isModalOpen || editingTask !== null;
+
   useEffect(() => {
-    document.body.style.overflow = isModalOpen ? 'hidden' : '';
+    document.body.style.overflow = isModalVisible ? 'hidden' : '';
 
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isModalOpen]);
+  }, [isModalVisible]);
 
   const showLoadingIndicator =
     !tasksData || !rooms || !devices || isDeletingScheduledTask || isTogglingActive;
@@ -98,16 +101,21 @@ const Scheduler: FC = () => {
               devices={devices}
               onDeleteTask={deleteScheduledTask}
               onToggleActive={toggleActive}
+              onEdit={setEditingTask}
             />
           )}
         </div>
       )}
       {!showLoadingIndicator && (
         <TaskModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          isOpen={isModalOpen || editingTask !== null}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingTask(null);
+          }}
           rooms={rooms}
           devices={devices}
+          editTask={editingTask}
         />
       )}
       <Navigation />

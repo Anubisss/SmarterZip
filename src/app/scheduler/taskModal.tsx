@@ -1,137 +1,189 @@
 'use client';
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import React, { FC, FormEvent, useEffect, useState } from 'react';
 
-import { useCreateScheduledTask } from '../apiHooks/scheduledTasks';
+import { useCreateScheduledTask, useUpdateScheduledTask } from '../apiHooks/scheduledTasks';
 import BlindsIcon from '../home/devices/shutterSwitch/blindsIcon';
 import { Device, Room } from '../home/types';
 import { getDeviceTypeName, getUtcTimeFromLocalTime } from './helpers';
+import { ScheduledTask } from './types';
+
+dayjs.extend(utc);
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   rooms: Room[];
   devices: Device[];
+  editTask?: ScheduledTask | null;
 }
 
-const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
+const getLocalTimeFromUtc = (utcTime: string): string => {
+  const utcDate = dayjs.utc(`${dayjs.utc().format('YYYY-MM-DD')}T${utcTime}:00`);
+  return utcDate.local().format('HH:mm');
+};
+
+const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices, editTask }) => {
+  const isEditMode = !!editTask;
+
   const [roomId, setRoomId] = useState('');
   const [deviceId, setDeviceId] = useState('');
   const [when, setWhen] = useState('');
   const [action, setAction] = useState('');
 
-  const { mutateAsync: createScheduledTask, error, isPending } = useCreateScheduledTask();
+  const {
+    mutateAsync: createScheduledTask,
+    error: createError,
+    isPending: isCreating,
+  } = useCreateScheduledTask();
 
-  const handleNewTask = async (e: FormEvent<HTMLFormElement>) => {
+  const {
+    mutateAsync: updateScheduledTask,
+    error: updateError,
+    isPending: isUpdating,
+  } = useUpdateScheduledTask();
+
+  const isPending = isCreating || isUpdating;
+  const error = createError || updateError;
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (isPending) {
-      return;
-    }
-    if (!roomId || !deviceId || !when || !action) {
-      return;
-    }
-    const device = devices.find((d) => d.id === +deviceId);
-    if (!device || !device.stateUuid) {
-      return;
-    }
-    if (device.type === 'lampSwitch' && action !== 'true' && action !== 'false') {
-      return;
-    }
-    if (
-      device.type === 'shutterSwitch' &&
-      (Number.isNaN(+action) || +action < 0 || +action > 100)
-    ) {
-      return;
-    }
+    if (isPending) return;
+    if (!when || !action) return;
 
     const utcDateStr = new Date().toISOString().split('T')[0];
     const localDate = new Date(`${utcDateStr}T${when}`);
+    const utcWhen = getUtcTimeFromLocalTime(localDate);
 
-    await createScheduledTask({
-      roomId: +roomId,
-      deviceId: +deviceId,
-      deviceStateUuid: device.stateUuid,
-      when: getUtcTimeFromLocalTime(localDate),
-      action,
-    });
+    if (isEditMode) {
+      const device = devices.find((d) => d.id === editTask.deviceId);
+      if (device?.type === 'lampSwitch' && action !== 'true' && action !== 'false') return;
+      if (
+        device?.type === 'shutterSwitch' &&
+        (Number.isNaN(+action) || +action < 0 || +action > 100)
+      ) {
+        return;
+      }
+
+      await updateScheduledTask({ id: editTask.id, action, when: utcWhen });
+    } else {
+      if (!roomId || !deviceId) return;
+      const device = devices.find((d) => d.id === +deviceId);
+      if (!device || !device.stateUuid) return;
+      if (device.type === 'lampSwitch' && action !== 'true' && action !== 'false') return;
+      if (
+        device.type === 'shutterSwitch' &&
+        (Number.isNaN(+action) || +action < 0 || +action > 100)
+      ) {
+        return;
+      }
+
+      await createScheduledTask({
+        roomId: +roomId,
+        deviceId: +deviceId,
+        deviceStateUuid: device.stateUuid,
+        when: utcWhen,
+        action,
+      });
+    }
+
     onClose();
   };
 
   useEffect(() => {
-    const device = devices.find((d) => d.id === +deviceId);
-    if (device) {
-      if (device.type === 'shutterSwitch') {
+    if (!isEditMode) {
+      const device = devices.find((d) => d.id === +deviceId);
+      if (device?.type === 'shutterSwitch') {
         setAction('50');
         return;
       }
+      setAction('');
     }
-    setAction('');
-  }, [deviceId, devices]);
+  }, [deviceId, devices, isEditMode]);
 
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+
+    if (editTask) {
+      setRoomId(String(editTask.roomId));
+      setDeviceId(String(editTask.deviceId));
+      setWhen(getLocalTimeFromUtc(editTask.when));
+      setAction(editTask.action);
+    } else {
       setRoomId('');
       setDeviceId('');
       setWhen('');
       setAction('');
     }
-  }, [isOpen]);
+  }, [isOpen, editTask]);
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
 
   const roomDevices =
     roomId !== '' ? devices.filter((d) => d.roomId === +roomId && d.stateUuid) : [];
-  const selectedDeviceType: undefined | Device['type'] =
-    roomId !== '' && deviceId !== ''
+  const selectedDeviceType: undefined | Device['type'] = isEditMode
+    ? devices.find((d) => d.id === editTask.deviceId)?.type
+    : roomId !== '' && deviceId !== ''
       ? roomDevices.find((d) => d.id === +deviceId)?.type
       : undefined;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-60">
       <div className="max-h-screen w-96 overflow-y-auto rounded border border-black bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-        <form onSubmit={handleNewTask}>
-          <h2 className="mb-5 text-2xl font-bold">New Task</h2>
+        <form onSubmit={handleSubmit}>
+          <h2 className="mb-5 text-2xl font-bold">{isEditMode ? 'Edit Task' : 'New Task'}</h2>
           <div className="mb-1">
             <label className="mb-2 block font-bold">Room</label>
-            <select
-              value={roomId}
-              onChange={(e) => {
-                setRoomId(e.target.value);
-                setDeviceId('');
-              }}
-              className="mb-4 w-full rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-900"
-              required
-            >
-              <option value="" disabled hidden>
-                Choose a room
-              </option>
-              {rooms.map((room) => (
-                <option key={room.id} value={room.id}>
-                  {room.name}
+            {isEditMode ? (
+              <div className="mb-4 rounded border border-gray-200 bg-gray-100 p-2 dark:border-gray-600 dark:bg-gray-700">
+                {editTask.roomName}
+              </div>
+            ) : (
+              <select
+                value={roomId}
+                onChange={(e) => {
+                  setRoomId(e.target.value);
+                  setDeviceId('');
+                }}
+                className="mb-4 w-full rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-900"
+                required
+              >
+                <option value="" disabled hidden>
+                  Choose a room
                 </option>
-              ))}
-            </select>
+                {rooms.map((room) => (
+                  <option key={room.id} value={room.id}>
+                    {room.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
           <div className="mb-1">
             <label className="mb-2 block font-bold">Device</label>
-            <select
-              value={deviceId}
-              onChange={(e) => setDeviceId(e.target.value)}
-              className="mb-4 w-full rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-900"
-              required
-            >
-              <option value="" disabled hidden>
-                Choose a device
-              </option>
-              {roomDevices.map((device) => (
-                <option key={device.id} value={device.id}>
-                  [{getDeviceTypeName(device.type)}] {device.name}
+            {isEditMode ? (
+              <div className="mb-4 rounded border border-gray-200 bg-gray-100 p-2 dark:border-gray-600 dark:bg-gray-700">
+                {editTask.deviceName}
+              </div>
+            ) : (
+              <select
+                value={deviceId}
+                onChange={(e) => setDeviceId(e.target.value)}
+                className="mb-4 w-full rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-900"
+                required
+              >
+                <option value="" disabled hidden>
+                  Choose a device
                 </option>
-              ))}
-            </select>
+                {roomDevices.map((device) => (
+                  <option key={device.id} value={device.id}>
+                    [{getDeviceTypeName(device.type)}] {device.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
           <div className="mb-4">
             <label className="mb-2 block font-bold">When</label>
@@ -183,7 +235,9 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
           )}
           {!isPending && error && (
             <div className="mb-4">
-              <p className="text-red-500">Wasn&apos;t able to create a new task. Try again.</p>
+              <p className="text-red-500">
+                Wasn&apos;t able to {isEditMode ? 'update' : 'create'} the task. Try again.
+              </p>
             </div>
           )}
           {!isPending && (
@@ -199,7 +253,7 @@ const TaskModal: FC<Props> = ({ isOpen, onClose, rooms, devices }) => {
                 className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 dark:bg-blue-800 dark:text-gray-300 dark:hover:bg-blue-700"
                 type="submit"
               >
-                Add
+                {isEditMode ? 'Save' : 'Add'}
               </button>
             </div>
           )}

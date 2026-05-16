@@ -9,9 +9,10 @@ interface Props {
   devices: Device[];
   onDeleteTask: (taskId: number) => void;
   onToggleActive: (taskId: number) => void;
+  onEdit: (task: ScheduledTask) => void;
 }
 
-const TaskTable: FC<Props> = ({ tasks, devices, onDeleteTask, onToggleActive }) => {
+const TaskTable: FC<Props> = ({ tasks, devices, onDeleteTask, onToggleActive, onEdit }) => {
   return (
     <div className="mx-auto max-w-[1600px] overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200 border dark:divide-gray-700 dark:border-gray-600">
@@ -24,7 +25,7 @@ const TaskTable: FC<Props> = ({ tasks, devices, onDeleteTask, onToggleActive }) 
             <th className="p-3">Active</th>
             <th className="p-3">Created</th>
             <th className="p-3">Last executed</th>
-            <th className="p-3">Delete</th>
+            <th className="p-3">Edit/Delete</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
@@ -35,6 +36,7 @@ const TaskTable: FC<Props> = ({ tasks, devices, onDeleteTask, onToggleActive }) 
               device={devices.find((d) => d.id === task.deviceId)}
               onDelete={onDeleteTask}
               onToggleActive={onToggleActive}
+              onEdit={onEdit}
             />
           ))}
         </tbody>

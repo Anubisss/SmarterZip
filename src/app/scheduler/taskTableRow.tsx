@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import React, { FC } from 'react';
-import { MdDelete } from 'react-icons/md';
+import { MdDelete, MdEdit } from 'react-icons/md';
 import { PiLampPendantFill, PiLampPendantLight } from 'react-icons/pi';
 
 import BlindsIcon from '../home/devices/shutterSwitch/blindsIcon';
@@ -19,9 +19,10 @@ interface Props {
   device?: Device;
   onDelete: (taskId: number) => void;
   onToggleActive: (taskId: number) => void;
+  onEdit: (task: ScheduledTask) => void;
 }
 
-const TaskTableRow: FC<Props> = ({ task, device, onDelete, onToggleActive }) => {
+const TaskTableRow: FC<Props> = ({ task, device, onDelete, onToggleActive, onEdit }) => {
   const isActive = task.active === 1;
 
   const handleDeleteClick = (taskId: number) => {
@@ -87,9 +88,13 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete, onToggleActive }) => 
         )}
       </td>
       <td className="h-full p-2">
-        <div className="flex h-full items-center justify-center">
+        <div className="flex h-full items-center justify-center gap-3">
+          <MdEdit
+            className="h-6 w-6 cursor-pointer hover:text-blue-500"
+            onClick={() => onEdit(task)}
+          />
           <MdDelete
-            className="h-6 w-6 cursor-pointer hover:text-gray-500"
+            className="h-6 w-6 cursor-pointer hover:text-blue-500"
             onClick={() => handleDeleteClick(task.id)}
           />
         </div>

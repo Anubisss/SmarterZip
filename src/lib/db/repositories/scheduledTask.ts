@@ -40,6 +40,13 @@ class ScheduledTaskRepository {
     stmt.run(time, id);
   }
 
+  static update(id: number, action: string, when: string): void {
+    const stmt = getDb().prepare(
+      `UPDATE "${TABLE_NAME}" SET "action" = ?, "when" = ? WHERE "id" = ?`,
+    );
+    stmt.run(action, when, id);
+  }
+
   static toggleActive(id: number): void {
     const stmt = getDb().prepare(
       `UPDATE "${TABLE_NAME}" SET "active" = CASE WHEN "active" = 1 THEN 0 ELSE 1 END WHERE "id" = ?`,
