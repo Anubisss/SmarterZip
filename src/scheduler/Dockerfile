@@ -19,6 +19,8 @@ FROM node:24-alpine AS runner
 
 WORKDIR /app
 
+ENV NODE_ENV=production
+
 COPY --chown=node:node --from=builder /app/dist ./dist
 COPY --chown=node:node --from=builder /app/scheduler-deps/node_modules ./node_modules
 

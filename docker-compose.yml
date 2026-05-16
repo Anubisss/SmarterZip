@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: ./src/app/Dockerfile
     ports:
-      - '${HOST_PORT}:3000'
+      - "${HOST_PORT}:3000"
     environment:
       - NODE_ENV=production
       - API_URL=${API_URL}
@@ -22,7 +22,6 @@ services:
     depends_on:
       - web
     environment:
-      - NODE_ENV=production
       - DATABASE_PATH=/app/db/${DATABASE_FILENAME:-SmarterZip.sqlite3}
       - DATABASE_LOGGING_ENABLED=${DATABASE_LOGGING_ENABLED}
       - API_URL=${API_URL}
