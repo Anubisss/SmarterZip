@@ -1,12 +1,6 @@
-import devicesConfigImport from '../config/devices.json';
-import ignoredDevicesConfigImport from '../config/ignoredDevices.json';
-import roomsConfigImport from '../config/rooms.json';
 import ZIPATO_URLS from '../constants/zipatoUrls';
+import { getDevicesConfig, getIgnoredDevicesConfig, getRoomsConfig } from '../lib/configReader';
 import ZipatoClient from '../lib/zipatoClient';
-
-const roomsConfig: { id: number; name: string }[] = roomsConfigImport;
-const ignoredDevicesConfig: number[] = ignoredDevicesConfigImport;
-const devicesConfig: { id: number; name: string }[] = devicesConfigImport;
 
 interface Device {
   id: number;
@@ -39,19 +33,23 @@ const convertDeviceType = (type: string): string | null => {
   }
 };
 
-const isDeviceIgnored = (deviceId: number): boolean => {
-  return ignoredDevicesConfig.includes(deviceId);
-};
-
-const getDeviceName = (device: AbilityZipato): string => {
-  const config = devicesConfig.find((dc) => dc.id === device.id);
-  if (config) {
-    return config.name;
-  }
-  return device.name;
-};
-
 const getDevices = async (): Promise<Device[]> => {
+  const roomsConfig = getRoomsConfig();
+  const devicesConfig = getDevicesConfig();
+  const ignoredDevicesConfig = getIgnoredDevicesConfig();
+
+  const isDeviceIgnored = (deviceId: number): boolean => {
+    return ignoredDevicesConfig.includes(deviceId);
+  };
+
+  const getDeviceName = (device: AbilityZipato): string => {
+    const config = devicesConfig.find((dc) => dc.id === device.id);
+    if (config) {
+      return config.name;
+    }
+    return device.name;
+  };
+
   const res = await ZipatoClient.getInstance().getClient().get(ZIPATO_URLS.getAbilities);
 
   const devices: Device[] = [];

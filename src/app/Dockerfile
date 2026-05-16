@@ -1,5 +1,8 @@
 FROM node:24-alpine AS builder
 
+# hadolint ignore=DL3018
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
 COPY . ./

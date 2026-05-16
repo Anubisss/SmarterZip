@@ -1,19 +1,27 @@
 FROM node:24-alpine AS builder
 
+# hadolint ignore=DL3018
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
 COPY . ./
 
 RUN npm ci && npm run scheduler:build
 
+WORKDIR /app/scheduler-deps
+
+COPY src/scheduler/package.json src/scheduler/package-lock.json ./
+
+RUN npm ci --omit=dev
+
 FROM node:24-alpine AS runner
 
 WORKDIR /app
 
-COPY --chown=node:node --from=builder /app/package.json .
-COPY --chown=node:node --from=builder /app/package-lock.json .
 COPY --chown=node:node --from=builder /app/dist ./dist
+COPY --chown=node:node --from=builder /app/scheduler-deps/node_modules ./node_modules
 
-RUN npm ci --omit=dev
+USER node
 
-CMD ["npm", "run", "scheduler:prod"]
+CMD ["node", "dist/scheduler/scheduler/index.js"]

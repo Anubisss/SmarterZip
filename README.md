@@ -59,11 +59,11 @@ https://www.youtube.com/watch?v=i53w90-4FZ4
 
 ### How to start (API & web client)
 
-Create 3 configuration files based on the examples provided in src/app/api/config/\*.json.example
+Create 3 configuration files based on the examples provided in config/\*.json.example
 
-- src/app/api/config/devices.json - devices can be renamed (by device ID and name)
-- src/app/api/config/ignoredDevices.json - put those devices (device ID) here which shouldn't be displayed
-- src/app/api/config/rooms.json - configure all rooms to be shown on the homepage (by room ID and name)
+- config/devices.json - devices can be renamed (by device ID and name)
+- config/ignoredDevices.json - put those devices (device ID) here which shouldn't be displayed
+- config/rooms.json - configure all rooms to be shown on the homepage (by room ID and name)
 
 Create an empty SQLite DB
 
@@ -122,7 +122,9 @@ Build images locally via compose and start them.
 ```
 HOST_PORT=6613 \
 API_URL=http://web:3000/api \
-DATABASE_PATH=/Users/abc/dev/SmarterZip.sqlite3 \
+CONFIG_PATH=/Users/abc/dev/smarterzip-config \
+DATABASE_DIR=/Users/abc/dev/databases \
+DATABASE_FILENAME=SmarterZip.sqlite3 \
 DATABASE_LOGGING_ENABLED=false \
 SCHEDULER_LOGIN_EMAIL=mai@l.com \
 SCHEDULER_LOGIN_PASSWORD=pass \
@@ -134,8 +136,7 @@ docker-compose up --build -d
 
 Use pre-built images and start them.
 
-Sadly this won't work becase the web image contains dummy config files (rooms.json, etc.).
-TODO: move these config files out of the image.
+Config files (rooms.json, devices.json, ignoredDevices.json) are mounted at runtime via volume.
 
 ```
 docker pull ghcr.io/anubisss/smarterzip-web:latest
@@ -147,7 +148,8 @@ docker run -d \
   -e API_URL=http://localhost:3000/api \
   -e DATABASE_PATH=/app/db/SmarterZip.sqlite3 \
   -e DATABASE_LOGGING_ENABLED=false \
-  -v /Users/abc/dev/SmarterZip.sqlite3:/app/db/SmarterZip.sqlite3 \
+  -v /Users/abc/dev/databases:/app/db \
+  -v /Users/abc/dev/smarterzip-config:/app/config \
   -p 6613:3000 \
   ghcr.io/anubisss/smarterzip-web:latest
 
@@ -160,7 +162,7 @@ docker run -d \
   -e SCHEDULER_LOGIN_EMAIL=mai@l.com \
   -e SCHEDULER_LOGIN_PASSWORD=pass \
   -e SCHEDULER_LOGIN_SYSTEM_UUID=id-ad-f \
-  -v /Users/abc/dev/SmarterZip.sqlite3:/app/db/SmarterZip.sqlite3 \
+  -v /Users/abc/dev/databases:/app/db \
   ghcr.io/anubisss/smarterzip-scheduler:latest
 ```
 

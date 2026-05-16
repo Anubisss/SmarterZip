@@ -8,10 +8,11 @@ services:
     environment:
       - NODE_ENV=production
       - API_URL=${API_URL}
-      - DATABASE_PATH=/app/db/SmarterZip.sqlite3
+      - DATABASE_PATH=/app/db/${DATABASE_FILENAME:-SmarterZip.sqlite3}
       - DATABASE_LOGGING_ENABLED=${DATABASE_LOGGING_ENABLED}
     volumes:
-      - ${DATABASE_PATH}:/app/db/SmarterZip.sqlite3
+      - ${DATABASE_DIR}:/app/db
+      - ${CONFIG_PATH}:/app/config
     restart: unless-stopped
 
   scheduler:
@@ -22,12 +23,12 @@ services:
       - web
     environment:
       - NODE_ENV=production
-      - DATABASE_PATH=/app/db/SmarterZip.sqlite3
+      - DATABASE_PATH=/app/db/${DATABASE_FILENAME:-SmarterZip.sqlite3}
       - DATABASE_LOGGING_ENABLED=${DATABASE_LOGGING_ENABLED}
       - API_URL=${API_URL}
       - SCHEDULER_LOGIN_EMAIL=${SCHEDULER_LOGIN_EMAIL}
       - SCHEDULER_LOGIN_PASSWORD=${SCHEDULER_LOGIN_PASSWORD}
       - SCHEDULER_LOGIN_SYSTEM_UUID=${SCHEDULER_LOGIN_SYSTEM_UUID}
     volumes:
-      - ${DATABASE_PATH}:/app/db/SmarterZip.sqlite3
+      - ${DATABASE_DIR}:/app/db
     restart: unless-stopped
