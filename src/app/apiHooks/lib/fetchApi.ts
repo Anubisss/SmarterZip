@@ -3,12 +3,18 @@ import { ScheduledTaskDTO } from '@/app/scheduler/types';
 import { System } from '@/app/systems/types';
 import fetchJson from './fetchJson';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const getBaseUrl = () => {
+  if (typeof window === 'undefined') {
+    return process.env.API_URL ?? 'http://localhost:3000/api';
+  }
+  return '/api';
+};
 
-export const getScheduledTasks = () => fetchJson<ScheduledTaskDTO[]>(`${BASE_URL}/scheduled-tasks`);
-export const getRooms = () => fetchJson<Room[]>(`${BASE_URL}/rooms`);
-export const getDevices = () => fetchJson<Device[]>(`${BASE_URL}/devices`);
-export const getSystems = () => fetchJson<System[]>(`${BASE_URL}/systems`);
-export const getDeviceStates = () => fetchJson<DeviceState[]>(`${BASE_URL}/devices/states`);
+export const getScheduledTasks = () =>
+  fetchJson<ScheduledTaskDTO[]>(`${getBaseUrl()}/scheduled-tasks`);
+export const getRooms = () => fetchJson<Room[]>(`${getBaseUrl()}/rooms`);
+export const getDevices = () => fetchJson<Device[]>(`${getBaseUrl()}/devices`);
+export const getSystems = () => fetchJson<System[]>(`${getBaseUrl()}/systems`);
+export const getDeviceStates = () => fetchJson<DeviceState[]>(`${getBaseUrl()}/devices/states`);
 export const getDeviceState = (stateUuid: string) =>
-  fetchJson<DeviceState>(`${BASE_URL}/devices/states/${stateUuid}`);
+  fetchJson<DeviceState>(`${getBaseUrl()}/devices/states/${stateUuid}`);

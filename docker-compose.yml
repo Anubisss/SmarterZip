@@ -3,12 +3,11 @@ services:
     build:
       context: .
       dockerfile: ./src/app/Dockerfile
-      args:
-        - NEXT_PUBLIC_API_URL
     ports:
       - '${HOST_PORT}:3000'
     environment:
       - NODE_ENV=production
+      - API_URL=${API_URL}
       - DATABASE_PATH=/app/db/SmarterZip.sqlite3
       - DATABASE_LOGGING_ENABLED=${DATABASE_LOGGING_ENABLED}
     volumes:

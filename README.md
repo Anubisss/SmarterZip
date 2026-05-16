@@ -121,10 +121,9 @@ Build images locally via compose and start them.
 
 ```
 HOST_PORT=6613 \
-NEXT_PUBLIC_API_URL=http://yourip:6613/api
+API_URL=http://web:3000/api \
 DATABASE_PATH=/Users/abc/dev/SmarterZip.sqlite3 \
 DATABASE_LOGGING_ENABLED=false \
-API_URL=http://web:3000/api \
 SCHEDULER_LOGIN_EMAIL=mai@l.com \
 SCHEDULER_LOGIN_PASSWORD=pass \
 SCHEDULER_LOGIN_SYSTEM_UUID=id-ad-f \
@@ -145,6 +144,7 @@ docker pull ghcr.io/anubisss/smarterzip-scheduler:latest
 docker run -d \
   --name smarterzip-web \
   --restart unless-stopped \
+  -e API_URL=http://localhost:3000/api \
   -e DATABASE_PATH=/app/db/SmarterZip.sqlite3 \
   -e DATABASE_LOGGING_ENABLED=false \
   -v /Users/abc/dev/SmarterZip.sqlite3:/app/db/SmarterZip.sqlite3 \
@@ -201,7 +201,6 @@ kubectl port-forward svc/web 8484:3000 -n smarterzip
 ```
 
 After this you can access the web on http://127.0.0.1:8484/
-Don't forget to set NEXT_PUBLIC_API_URL=http://127.0.0.1:8484/api during Docker build
 
 ### License
 

@@ -6,20 +6,20 @@ COPY . ./
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-ARG NEXT_PUBLIC_API_URL
-
 RUN npm ci && npm run build
 
 FROM node:20.15.0-alpine AS runner
 
 WORKDIR /app
 
-COPY --chown=node:node --from=builder /app/package.json .
-COPY --chown=node:node --from=builder /app/package-lock.json .
-COPY --chown=node:node --from=builder /app/.next ./.next
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN npm ci --omit=dev
+COPY --chown=node:node --from=builder /app/.next/standalone ./
+COPY --chown=node:node --from=builder /app/.next/static ./.next/static
+
+USER node
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
