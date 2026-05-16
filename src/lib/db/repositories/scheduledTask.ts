@@ -9,10 +9,18 @@ class ScheduledTaskRepository {
   static insert(task: Omit<ScheduledTask, 'id' | 'createdAt' | 'lastExecutedAt'>): void {
     const now = new Date().toISOString();
     const stmt = getDb().prepare(`
-      INSERT INTO "${TABLE_NAME}" ("roomId", "deviceId", "deviceStateUuid", "action", "when", "createdAt")
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO "${TABLE_NAME}" ("roomId", "deviceId", "deviceStateUuid", "action", "when", "createdAt", "active")
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
-    stmt.run(task.roomId, task.deviceId, task.deviceStateUuid, task.action, task.when, now);
+    stmt.run(
+      task.roomId,
+      task.deviceId,
+      task.deviceStateUuid,
+      task.action,
+      task.when,
+      now,
+      task.active,
+    );
   }
 
   static getAll(): ScheduledTask[] {
@@ -30,6 +38,13 @@ class ScheduledTaskRepository {
   static updateLastExecutedAt(id: number, time: string): void {
     const stmt = getDb().prepare(`UPDATE "${TABLE_NAME}" SET "lastExecutedAt" = ? WHERE "id" = ?`);
     stmt.run(time, id);
+  }
+
+  static toggleActive(id: number): void {
+    const stmt = getDb().prepare(
+      `UPDATE "${TABLE_NAME}" SET "active" = CASE WHEN "active" = 1 THEN 0 ELSE 1 END WHERE "id" = ?`,
+    );
+    stmt.run(id);
   }
 }
 

@@ -132,6 +132,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 537,
@@ -144,6 +145,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 128,
@@ -156,6 +158,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
       ];
       sortTasks(tasks);
@@ -179,6 +182,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 532,
@@ -191,6 +195,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 537,
@@ -203,6 +208,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 128,
@@ -215,6 +221,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 129,
@@ -227,6 +234,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
       ];
       sortTasks(tasks);
@@ -252,6 +260,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 532,
@@ -264,6 +273,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 537,
@@ -276,6 +286,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 128,
@@ -288,6 +299,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 131,
@@ -300,6 +312,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 132,
@@ -312,6 +325,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
         {
           id: 129,
@@ -324,6 +338,7 @@ describe('helpers', () => {
           lastExecutedAt: '',
           roomName: '',
           deviceName: '',
+          active: 1,
         },
       ];
       sortTasks(tasks);

@@ -18,10 +18,13 @@ interface Props {
   task: ScheduledTask;
   device?: Device;
   onDelete: (taskId: number) => void;
+  onToggleActive: (taskId: number) => void;
 }
 
-const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
-  const onDeleteIconClick = (taskId: number) => {
+const TaskTableRow: FC<Props> = ({ task, device, onDelete, onToggleActive }) => {
+  const isActive = task.active === 1;
+
+  const handleDeleteClick = (taskId: number) => {
     const confirmed = window.confirm('Are you sure you want to delete this task?');
     if (confirmed) {
       onDelete(taskId);
@@ -30,7 +33,11 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
 
   return (
     <tr
-      className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+      className={`border-b hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-700 ${
+        isActive
+          ? 'bg-white dark:bg-gray-800'
+          : 'bg-gray-100 text-gray-400 dark:bg-gray-900 dark:text-gray-500'
+      }`}
       key={task.id}
     >
       <td className="p-2 text-center">{task.roomName}</td>
@@ -56,6 +63,20 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
         ) : null}
       </td>
       <td className="p-2 text-center">
+        <button
+          className={`rounded-full px-3 py-1 text-sm font-medium transition-colors duration-200 ${
+            isActive
+              ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800'
+              : 'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800'
+          }`}
+          onClick={() => onToggleActive(task.id)}
+          aria-label={isActive ? 'Deactivate task' : 'Activate task'}
+          tabIndex={0}
+        >
+          {isActive ? 'Active' : 'Inactive'}
+        </button>
+      </td>
+      <td className="p-2 text-center">
         <LocalTime dateTime={task.createdAt} format="YYYY MMMM DD, HH:mm:ss" />
       </td>
       <td className="p-2 text-center">
@@ -69,7 +90,7 @@ const TaskTableRow: FC<Props> = ({ task, device, onDelete }) => {
         <div className="flex h-full items-center justify-center">
           <MdDelete
             className="h-6 w-6 cursor-pointer hover:text-gray-500"
-            onClick={() => onDeleteIconClick(task.id)}
+            onClick={() => handleDeleteClick(task.id)}
           />
         </div>
       </td>

@@ -15,6 +15,7 @@ interface ScheduledTask {
   when: string;
   createdAt: string;
   lastExecutedAt: string;
+  active: number;
 }
 
 export type { ScheduledTask, State };

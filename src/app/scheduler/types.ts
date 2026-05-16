@@ -7,6 +7,7 @@ export interface ScheduledTaskDTO {
   when: string;
   createdAt: string;
   lastExecutedAt: string;
+  active: number;
 }
 
 export interface ScheduledTask extends ScheduledTaskDTO {

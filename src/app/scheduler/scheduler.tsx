@@ -4,7 +4,11 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 
 import { useDevices } from '../apiHooks/devices';
 import { useRooms } from '../apiHooks/rooms';
-import { useDeleteScheduledTask, useScheduledTasks } from '../apiHooks/scheduledTasks';
+import {
+  useDeleteScheduledTask,
+  useScheduledTasks,
+  useToggleScheduledTaskActive,
+} from '../apiHooks/scheduledTasks';
 import Footer from '../components/footer';
 import Navigation from '../components/navigation';
 import { getDeviceName, getRoomName, sortTasks } from './helpers';
@@ -24,6 +28,12 @@ const Scheduler: FC = () => {
     error: deleteScheduledTaskError,
     isPending: isDeletingScheduledTask,
   } = useDeleteScheduledTask();
+
+  const {
+    mutate: toggleActive,
+    error: toggleActiveError,
+    isPending: isTogglingActive,
+  } = useToggleScheduledTaskActive();
 
   const tasks: ScheduledTask[] = useMemo(() => {
     if (!rooms || !devices || !tasksData) {
@@ -48,8 +58,14 @@ const Scheduler: FC = () => {
     };
   }, [isModalOpen]);
 
-  const showLoadingIndicator = !tasksData || !rooms || !devices || isDeletingScheduledTask;
-  const hasError = !!tasksError || !!roomsError || !!devicesError || !!deleteScheduledTaskError;
+  const showLoadingIndicator =
+    !tasksData || !rooms || !devices || isDeletingScheduledTask || isTogglingActive;
+  const hasError =
+    !!tasksError ||
+    !!roomsError ||
+    !!devicesError ||
+    !!deleteScheduledTaskError ||
+    !!toggleActiveError;
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 dark:bg-gray-900 dark:text-gray-300">
@@ -77,7 +93,12 @@ const Scheduler: FC = () => {
           </div>
           {tasks.length === 0 && <div className="mt-8 text-center text-xl font-bold">No tasks</div>}
           {tasks.length > 0 && (
-            <TaskTable tasks={tasks} devices={devices} onDeleteTask={deleteScheduledTask} />
+            <TaskTable
+              tasks={tasks}
+              devices={devices}
+              onDeleteTask={deleteScheduledTask}
+              onToggleActive={toggleActive}
+            />
           )}
         </div>
       )}

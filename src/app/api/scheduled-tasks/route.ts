@@ -31,6 +31,7 @@ export const POST = async (req: Request) => {
       deviceStateUuid,
       when,
       action,
+      active: 1,
     });
   } catch (ex: any) {
     return NextResponse.json(

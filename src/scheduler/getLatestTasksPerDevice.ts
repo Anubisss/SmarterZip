@@ -11,12 +11,14 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(customParseFormat);
 
 const getLatestTasksPerDevice = (now: string): ScheduledTask[] => {
-  const tasks = ScheduledTaskRepository.getAll();
+  const tasks = ScheduledTaskRepository.getAll().filter((t) => t.active);
 
-  const tasksBeforeNow = tasks.filter((t) => {
-    const whenDate = `${dayjs.utc(now).format('YYYY-MM-DD')}T${t.when}`;
-    return dayjs.utc(whenDate).isSameOrBefore(now);
-  });
+  const tasksBeforeNow = tasks
+    .filter((t) => {
+      const whenDate = `${dayjs.utc(now).format('YYYY-MM-DD')}T${t.when}`;
+      return dayjs.utc(whenDate).isSameOrBefore(now);
+    })
+    .filter((t) => t.active);
 
   const tasksPerDevice: { [deviceId: ScheduledTask['deviceId']]: ScheduledTask[] } = {};
   for (const task of tasksBeforeNow) {

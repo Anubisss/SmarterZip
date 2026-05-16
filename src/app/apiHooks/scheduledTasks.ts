@@ -78,3 +78,23 @@ export const useCreateScheduledTask = () => {
     },
   });
 };
+
+const toggleScheduledTaskActive = async (id: number): Promise<void> => {
+  const response = await fetch(`/api/scheduled-tasks/${id}`, {
+    method: 'PATCH',
+  });
+  if (!response.ok) {
+    throw new HttpError(response.status, response.statusText);
+  }
+};
+
+export const useToggleScheduledTaskActive = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, number>({
+    mutationFn: toggleScheduledTaskActive,
+    onSuccess: () => {
+      return queryClient.invalidateQueries({ queryKey: ['scheduledTasks'] });
+    },
+  });
+};

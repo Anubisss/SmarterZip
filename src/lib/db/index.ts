@@ -13,9 +13,15 @@ const setup = (db: SQLiteDatabase) => {
       "action" TEXT,
       "when" TEXT,
       "createdAt" TEXT,
-      "lastExecutedAt" TEXT
+      "lastExecutedAt" TEXT,
+      "active" INTEGER NOT NULL DEFAULT 1
     )
   `);
+
+  const columns = db.pragma('table_info(scheduled_tasks)') as { name: string }[];
+  if (!columns.some((col) => col.name === 'active')) {
+    db.exec(`ALTER TABLE "scheduled_tasks" ADD COLUMN "active" INTEGER NOT NULL DEFAULT 1`);
+  }
 };
 
 const getDb = (): SQLiteDatabase => {
