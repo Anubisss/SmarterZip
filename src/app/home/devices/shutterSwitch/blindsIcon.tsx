@@ -1,13 +1,12 @@
 'use client';
 
 import React, { FC } from 'react';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
-import { PiSquareHalfBottomFill } from 'react-icons/pi';
+import { FaArrowDown, FaArrowUp, FaStop } from 'react-icons/fa';
 
 interface Props {
   value: number;
   onClickArrowUp?: () => void;
-  onClickHalf?: () => void;
+  onClickStop?: () => void;
   onClickArrowDown?: () => void;
   showHeight?: boolean;
 }
@@ -15,22 +14,22 @@ interface Props {
 const BlindsIcon: FC<Props> = ({
   value,
   onClickArrowUp,
-  onClickHalf,
+  onClickStop,
   onClickArrowDown,
   showHeight = true,
 }) => {
   const height = 100 - value;
   return (
     <div className="flex items-center">
-      {onClickArrowUp && onClickHalf && onClickArrowDown && (
+      {onClickArrowUp && onClickStop && onClickArrowDown && (
         <div className="mr-2">
           <FaArrowUp
             className="mb-1 cursor-pointer text-2xl text-black hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-500"
             onClick={onClickArrowUp}
           />
-          <PiSquareHalfBottomFill
-            className="rotate-180 cursor-pointer text-2xl text-black hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-500"
-            onClick={onClickHalf}
+          <FaStop
+            className="cursor-pointer text-2xl text-black hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-500"
+            onClick={onClickStop}
           />
           <FaArrowDown
             className="mt-1 cursor-pointer text-2xl text-black hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-500"

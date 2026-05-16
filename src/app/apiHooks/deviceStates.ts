@@ -112,3 +112,35 @@ export const useChangeDeviceState = () => {
     },
   });
 };
+
+interface StopDeviceResponse {
+  value: string;
+}
+
+const stopDevice = async (deviceStateUuid: string): Promise<StopDeviceResponse> => {
+  const response = await fetch(`/api/devices/states/${deviceStateUuid}/actions/stop`, {
+    method: 'POST',
+  });
+  if (!response.ok) {
+    throw new HttpError(response.status, response.statusText);
+  }
+  return response.json();
+};
+
+export const useStopDevice = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<StopDeviceResponse, Error, string>({
+    mutationFn: stopDevice,
+    onSuccess: (data, deviceStateUuid) => {
+      queryClient.setQueryData<DeviceState[]>(['deviceStates'], (deviceStates) => {
+        if (!deviceStates) {
+          return undefined;
+        }
+        return deviceStates.map((ds) =>
+          ds.uuid === deviceStateUuid ? { ...ds, value: { ...ds.value, value: data.value } } : ds,
+        );
+      });
+    },
+  });
+};
