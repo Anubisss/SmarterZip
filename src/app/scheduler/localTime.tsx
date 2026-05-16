@@ -1,6 +1,8 @@
-import moment from 'moment';
-import React, { FC } from 'react';
-import Moment from 'react-moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import { FC } from 'react';
+
+dayjs.extend(utc);
 
 interface TimeProps {
   time: string;
@@ -17,8 +19,8 @@ interface DateProps {
 type Props = TimeProps | DateProps;
 
 const LocalTime: FC<Props> = ({ dateTime, time, format }) => {
-  const value = time ? `${moment.utc().format('YYYY-MM-DD')}T${time}:00Z` : dateTime;
-  return <Moment format={format}>{value}</Moment>;
+  const value = time ? `${dayjs.utc().format('YYYY-MM-DD')}T${time}:00Z` : dateTime!;
+  return <span>{dayjs(value).format(format)}</span>;
 };
 
 export default LocalTime;

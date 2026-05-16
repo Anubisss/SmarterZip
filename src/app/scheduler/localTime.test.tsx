@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import moment from 'moment';
-import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 
 import LocalTime from './localTime';
+
+dayjs.extend(utc);
 
 describe('LocalTime', () => {
   it('dateTime', () => {
@@ -17,7 +19,7 @@ describe('LocalTime', () => {
     });
 
     it('date (today) and time', () => {
-      const today = moment.utc().format('YYYY-MM-DD');
+      const today = dayjs.utc().format('YYYY-MM-DD');
 
       render(<LocalTime time="09:41" format="YYYY-MM-DD HH:mm" />);
       expect(screen.getByText(`${today} 09:41`)).toBeInTheDocument();

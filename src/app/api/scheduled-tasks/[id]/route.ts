@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 
 import ScheduledTaskRepository from '@/lib/db/repositories/scheduledTask';
 
-export const DELETE = async (req: Request, { params }: { params: { id: string } }) => {
-  const id = params.id;
+export const DELETE = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
   if (!id) {
     return NextResponse.json({}, { status: 400 });
   }

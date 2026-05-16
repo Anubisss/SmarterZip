@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 import changeState from './changeState';
 import getState from './getState';
 
-export const GET = async (req: Request, { params }: { params: { uuid: string } }) => {
-  const uuid = params.uuid;
+export const GET = async (req: Request, { params }: { params: Promise<{ uuid: string }> }) => {
+  const { uuid } = await params;
   if (!uuid) {
     return NextResponse.json({}, { status: 400 });
   }
@@ -21,8 +21,8 @@ export const GET = async (req: Request, { params }: { params: { uuid: string } }
   }
 };
 
-export const PUT = async (req: Request, { params }: { params: { uuid: string } }) => {
-  const uuid = params.uuid;
+export const PUT = async (req: Request, { params }: { params: Promise<{ uuid: string }> }) => {
+  const { uuid } = await params;
   if (!uuid) {
     return NextResponse.json({}, { status: 400 });
   }
